@@ -4,15 +4,22 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.pietermantel.object.GameState;
+import dev.pietermantel.object.Handler;
+import dev.pietermantel.object.instances.TestObject;
+
 public class Game implements Runnable {
 	private Window window;
 	private Thread thread;
+	private Handler handler;
 	private boolean running = false;
+	
+	// De huidige status van het spel.
+	public static GameState STATE = GameState.game;
 	
 	public static final int FPS = 60;
 
 	public Game() {
-		window = new Window("Hallo", 800, 600);
 		start();
 	}
 
@@ -32,11 +39,14 @@ public class Game implements Runnable {
 	}
 	
 	public void init() {
+		window = new Window("Hallo", 1280, 720);
+		handler = new Handler();
 		
+		Handler.objects.add(new TestObject(100, 100, 0, GameState.game));
 	}
 	
 	public void tick() {
-		
+		handler.tick();
 	}
 	
 	public void render() {
@@ -48,7 +58,8 @@ public class Game implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		
 		g.setColor(Color.black);
-		g.fillRect(0, 0, 800, 600);
+		g.fillRect(0, 0, 1280, 720);
+		handler.render(g);
 		
 		g.dispose();
 		bs.show();
