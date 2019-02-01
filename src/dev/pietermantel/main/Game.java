@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.pietermantel.input.KeyManager;
+import dev.pietermantel.input.MouseManager;
 import dev.pietermantel.object.GameState;
 import dev.pietermantel.object.Handler;
 import dev.pietermantel.object.instances.TestObject;
@@ -16,6 +18,7 @@ public class Game implements Runnable {
 	
 	// De huidige status van het spel.
 	public static GameState STATE = GameState.game;
+	public static Game GAME;
 	
 	public static final int FPS = 60;
 
@@ -24,7 +27,7 @@ public class Game implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		new Game();
+		GAME = new Game();
 	}
 	
 	public synchronized void start() {
@@ -41,6 +44,9 @@ public class Game implements Runnable {
 	public void init() {
 		window = new Window("Hallo", 1280, 720);
 		handler = new Handler();
+		KeyManager.init();
+		window.getCanvas().addKeyListener(new KeyManager());
+		window.getCanvas().addMouseListener(new MouseManager());
 		
 		Handler.objects.add(new TestObject(100, 100, 0, GameState.game));
 	}
@@ -94,4 +100,35 @@ public class Game implements Runnable {
 		}
 	}
 
+	public Window getWindow() {
+		return window;
+	}
+
+	public void setWindow(Window window) {
+		this.window = window;
+	}
+
+	public Thread getThread() {
+		return thread;
+	}
+
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+
+	public Handler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
 }
