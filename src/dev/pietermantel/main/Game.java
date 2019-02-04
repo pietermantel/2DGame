@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.pietermantel.background.Background;
+import dev.pietermantel.background.BackgroundHandler;
 import dev.pietermantel.input.KeyManager;
 import dev.pietermantel.input.MouseManager;
 import dev.pietermantel.object.GameState;
@@ -48,11 +50,14 @@ public class Game implements Runnable {
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
 		
+		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
+		
 		Handler.objects.add(new TestObject(640, 360, 0, GameState.game));
 	}
 	
 	public void tick() {
 		handler.tick();
+		BackgroundHandler.tick();
 	}
 	
 	public void render() {
@@ -65,6 +70,7 @@ public class Game implements Runnable {
 		
 		g.setColor(Color.black);
 		g.fillRect(0, 0, 1280, 720);
+		BackgroundHandler.render(g);
 		handler.render(g);
 		
 		g.dispose();

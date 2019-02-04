@@ -6,7 +6,7 @@ import java.io.IOException;
 import dev.pietermantel.main.ResourceLoader;
 
 public enum Background {
-	playersBedroom("res/backgrounds/players_bedroom.jpg");
+	playersBedroom("res/backgrounds/player_bedroom.jpg");
 	
 	private String imagePath;
 	private Image image;
