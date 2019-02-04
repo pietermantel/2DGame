@@ -1,7 +1,6 @@
 package dev.pietermantel.object;
 
-public enum Type {
+public enum GameObjectType {
 	TestObject(),
-	BackGround(),
 	Player();
 }

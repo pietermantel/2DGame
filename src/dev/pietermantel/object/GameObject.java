@@ -6,14 +6,14 @@ import dev.pietermantel.object.component.ComponentManager;
 
 public abstract class GameObject {
 	protected int x, y, id;
-	protected Type type;
+	protected GameObjectType type;
 	// Dit zijn de states waarbij dit object zichtbaar moet zijn.
 	// Het is een array omdat je misschien meerdere states wil hebben waarbij het zichtbaar is.
 	protected GameState[] states;
 	// Dit regelt de components, zeg maar eigenschappen, van het object: dingen als textures, zwaartekracht, knopinteractie etc.
 	protected ComponentManager componentManager;
 	
-	public GameObject(int x, int y, int id, Type type, GameState[] states) {
+	public GameObject(int x, int y, int id, GameObjectType type, GameState[] states) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
@@ -25,7 +25,7 @@ public abstract class GameObject {
 	
 	// Een andere constructor met een enkele state, voor als er maar een state is. Dan is dit makkelijker.
 	// Je kan meerdere constructors hebben met verschillende arguments.
-	public GameObject(int x, int y, int id, Type type, GameState state) {
+	public GameObject(int x, int y, int id, GameObjectType type, GameState state) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
@@ -74,12 +74,20 @@ public abstract class GameObject {
 		this.id = id;
 	}
 
-	public Type getType() {
+	public GameObjectType getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(GameObjectType type) {
 		this.type = type;
+	}
+
+	public ComponentManager getComponentManager() {
+		return componentManager;
+	}
+
+	public void setComponentManager(ComponentManager componentManager) {
+		this.componentManager = componentManager;
 	}
 
 	public GameState[] getStates() {

@@ -10,6 +10,7 @@ import dev.pietermantel.input.KeyManager;
 import dev.pietermantel.input.MouseManager;
 import dev.pietermantel.object.GameState;
 import dev.pietermantel.object.Handler;
+import dev.pietermantel.object.instances.Player;
 import dev.pietermantel.object.instances.TestObject;
 
 public class Game implements Runnable {
@@ -52,7 +53,7 @@ public class Game implements Runnable {
 		
 		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
 		
-		Handler.objects.add(new TestObject(640, 360, 0, GameState.game));
+		Handler.objects.add(new Player(640, 360, 0, GameState.game));
 	}
 	
 	public void tick() {
