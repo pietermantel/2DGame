@@ -48,7 +48,7 @@ public class Game implements Runnable {
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
 		
-		Handler.objects.add(new TestObject(100, 100, 0, GameState.game));
+		Handler.objects.add(new TestObject(640, 360, 0, GameState.game));
 	}
 	
 	public void tick() {
