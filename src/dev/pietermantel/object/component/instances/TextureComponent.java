@@ -10,7 +10,7 @@ import dev.pietermantel.object.component.Component;
 
 public class TextureComponent extends Component {
 	private Image texture;
-	public int imgOffsetX, imgOffsetY;
+	private int imgOffsetX, imgOffsetY;
 	
 	public TextureComponent(GameObject parent, String texturePath, int imgOffsetX, int imgOffsetY) {
 		super(parent);
@@ -32,4 +32,30 @@ public class TextureComponent extends Component {
 	public void render(Graphics g) {
 		g.drawImage(texture, parent.getX() + imgOffsetX, parent.getY() + imgOffsetY, null);
 	}
+
+	public Image getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Image texture) {
+		this.texture = texture;
+	}
+
+	public int getImgOffsetX() {
+		return imgOffsetX;
+	}
+
+	public void setImgOffsetX(int imgOffsetX) {
+		this.imgOffsetX = imgOffsetX;
+	}
+
+	public int getImgOffsetY() {
+		return imgOffsetY;
+	}
+
+	public void setImgOffsetY(int imgOffsetY) {
+		this.imgOffsetY = imgOffsetY;
+	}
+	
+	
 }
