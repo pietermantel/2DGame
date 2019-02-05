@@ -26,7 +26,7 @@ public class BackgroundHandler {
 		if(y > 0) y = 0;
 		ACTUAL_X = x;
 		ACTUAL_Y = y;
-		System.out.println(x + ", " + y + ", " + SCROLL_X + ", " + SCROLL_Y);
+		//System.out.println(x + ", " + y + ", " + SCROLL_X + ", " + SCROLL_Y);
 		g.drawImage(CURRENT_BACKGROUND.getImage(), x, y, null);
 	}
 

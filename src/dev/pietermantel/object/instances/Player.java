@@ -3,7 +3,6 @@ package dev.pietermantel.object.instances;
 import java.awt.Graphics;
 
 import dev.pietermantel.background.BackgroundHandler;
-import dev.pietermantel.main.Game;
 import dev.pietermantel.object.GameObject;
 import dev.pietermantel.object.GameObjectType;
 import dev.pietermantel.object.GameState;

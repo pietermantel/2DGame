@@ -11,7 +11,6 @@ import dev.pietermantel.input.MouseManager;
 import dev.pietermantel.object.GameState;
 import dev.pietermantel.object.Handler;
 import dev.pietermantel.object.instances.Player;
-import dev.pietermantel.object.instances.TestObject;
 
 public class Game implements Runnable {
 	private Window window;
