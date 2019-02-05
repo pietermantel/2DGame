@@ -67,13 +67,13 @@ public class BackgroundHandler {
 		SCROLL_Y += yV;
 	}
 
-	private static Player getPlayer() {
-		for (GameObject object : Handler.objects) {
-			if (object.getType() == GameObjectType.Player) {
-				return (Player) object;
-			}
-		}
-		return null;
-	}
+//	private static Player getPlayer() {
+//		for (GameObject object : Handler.objects) {
+//			if (object.getType() == GameObjectType.Player) {
+//				return (Player) object;
+//			}
+//		}
+//		return null;
+//	}
 	
 }
