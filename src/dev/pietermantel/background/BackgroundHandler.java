@@ -13,7 +13,7 @@ import dev.pietermantel.object.instances.Player;
 public class BackgroundHandler {
 	public static Background CURRENT_BACKGROUND;
 	public static int SCROLL_X = 0, SCROLL_Y = 0, xV, yV, ACTUAL_X, ACTUAL_Y;
-	public static final int MAX_VELOCITY = 5;
+	public static final int MAX_VELOCITY = 20;
 
 	public static void render(Graphics g) {
 		int x = SCROLL_X;
@@ -55,14 +55,14 @@ public class BackgroundHandler {
 		if (!KeyManager.pressed[KeyEvent.VK_A] && !KeyManager.pressed[KeyEvent.VK_D] && xV < 0) {
 			xV += 1;
 		}
-		if (xV > 20)
-			xV = 20;
-		if (xV < -20)
-			xV = -20;
-		if (yV > 20)
-			yV = 20;
-		if (yV < -20)
-			yV = -20;
+		if (xV > MAX_VELOCITY)
+			xV = MAX_VELOCITY;
+		if (xV < -MAX_VELOCITY)
+			xV = -MAX_VELOCITY;
+		if (yV > MAX_VELOCITY)
+			yV = MAX_VELOCITY;
+		if (yV < -MAX_VELOCITY)
+			yV = -MAX_VELOCITY;
 		SCROLL_X += xV;
 		SCROLL_Y += yV;
 	}

@@ -11,7 +11,7 @@ public abstract class GameObject {
 	// Het is een array omdat je misschien meerdere states wil hebben waarbij het zichtbaar is.
 	protected GameState[] states;
 	// Dit regelt de components, zeg maar eigenschappen, van het object: dingen als textures, zwaartekracht, knopinteractie etc.
-	protected ComponentManager componentManager;
+	protected static ComponentManager componentManager;
 	
 	public GameObject(int x, int y, int id, GameObjectType type, GameState[] states) {
 		this.x = x;
@@ -82,7 +82,7 @@ public abstract class GameObject {
 		this.type = type;
 	}
 
-	public ComponentManager getComponentManager() {
+	public static ComponentManager getComponentManager() {
 		return componentManager;
 	}
 
