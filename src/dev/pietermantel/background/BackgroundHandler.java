@@ -5,10 +5,6 @@ import java.awt.event.KeyEvent;
 
 import dev.pietermantel.input.KeyManager;
 import dev.pietermantel.main.Game;
-import dev.pietermantel.object.GameObject;
-import dev.pietermantel.object.GameObjectType;
-import dev.pietermantel.object.Handler;
-import dev.pietermantel.object.instances.Player;
 
 public class BackgroundHandler {
 	public static Background CURRENT_BACKGROUND;
