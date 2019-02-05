@@ -12,7 +12,7 @@ import dev.pietermantel.object.instances.Player;
 
 public class BackgroundHandler {
 	public static Background CURRENT_BACKGROUND;
-	public static int SCROLL_X = 0, SCROLL_Y = 0, xV, yV;
+	public static int SCROLL_X = 0, SCROLL_Y = 0, xV, yV, ACTUAL_X, ACTUAL_Y;
 	public static final int MAX_VELOCITY = 5;
 
 	public static void render(Graphics g) {
@@ -22,7 +22,11 @@ public class BackgroundHandler {
 			x = -CURRENT_BACKGROUND.getImage().getWidth(null) + Game.GAME.getWindow().getCanvas().getWidth();
 		if (y < -CURRENT_BACKGROUND.getImage().getHeight(null) + Game.GAME.getWindow().getCanvas().getHeight())
 			y = -CURRENT_BACKGROUND.getImage().getHeight(null) + Game.GAME.getWindow().getCanvas().getHeight();
-		System.out.println(x + ", " + y);
+		if(x > 0) x = 0;
+		if(y > 0) y = 0;
+		ACTUAL_X = x;
+		ACTUAL_Y = y;
+		System.out.println(x + ", " + y + ", " + SCROLL_X + ", " + SCROLL_Y);
 		g.drawImage(CURRENT_BACKGROUND.getImage(), x, y, null);
 	}
 
@@ -71,4 +75,5 @@ public class BackgroundHandler {
 		}
 		return null;
 	}
+	
 }

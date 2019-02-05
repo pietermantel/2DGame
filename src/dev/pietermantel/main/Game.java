@@ -53,7 +53,7 @@ public class Game implements Runnable {
 		
 		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
 		
-		Handler.objects.add(new Player(640, 360, 0, GameState.game));
+		Handler.objects.add(new Player(530, 192, 0, GameState.game));
 	}
 	
 	public void tick() {
