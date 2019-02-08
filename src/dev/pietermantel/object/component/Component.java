@@ -7,12 +7,13 @@ import dev.pietermantel.object.GameObject;
 public abstract class Component {
 	// Dit is het object waar dit component bijhoort
 	protected GameObject parent;
-	
+
 	public Component(GameObject parent) {
 		this.parent = parent;
 	}
-	
+
 	public abstract void tick();
+
 	public abstract void render(Graphics g);
 
 	public GameObject getParent() {

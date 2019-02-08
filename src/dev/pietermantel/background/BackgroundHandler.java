@@ -18,11 +18,13 @@ public class BackgroundHandler {
 			x = -CURRENT_BACKGROUND.getImage().getWidth(null) + Game.GAME.getWindow().getCanvas().getWidth();
 		if (y < -CURRENT_BACKGROUND.getImage().getHeight(null) + Game.GAME.getWindow().getCanvas().getHeight())
 			y = -CURRENT_BACKGROUND.getImage().getHeight(null) + Game.GAME.getWindow().getCanvas().getHeight();
-		if(x > 0) x = 0;
-		if(y > 0) y = 0;
+		if (x > 0)
+			x = 0;
+		if (y > 0)
+			y = 0;
 		ACTUAL_X = x;
 		ACTUAL_Y = y;
-		//System.out.println(x + ", " + y + ", " + SCROLL_X + ", " + SCROLL_Y);
+		// System.out.println(x + ", " + y + ", " + SCROLL_X + ", " + SCROLL_Y);
 		g.drawImage(CURRENT_BACKGROUND.getImage(), x, y, null);
 	}
 
@@ -63,13 +65,13 @@ public class BackgroundHandler {
 		SCROLL_Y += yV;
 	}
 
-//	private static Player getPlayer() {
-//		for (GameObject object : Handler.objects) {
-//			if (object.getType() == GameObjectType.Player) {
-//				return (Player) object;
-//			}
-//		}
-//		return null;
-//	}
-	
+	// private static Player getPlayer() {
+	// for (GameObject object : Handler.objects) {
+	// if (object.getType() == GameObjectType.Player) {
+	// return (Player) object;
+	// }
+	// }
+	// return null;
+	// }
+
 }

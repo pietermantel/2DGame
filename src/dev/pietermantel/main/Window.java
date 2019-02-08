@@ -15,7 +15,7 @@ public class Window extends JFrame {
 		setTitle(title);
 		setVisible(true);
 		setLocationRelativeTo(null);
-		
+
 		canvas = new Canvas();
 		canvas.setSize(width, height);
 		canvas.setFocusable(true);

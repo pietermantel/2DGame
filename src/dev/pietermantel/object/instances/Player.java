@@ -22,13 +22,15 @@ public class Player extends GameObject {
 
 	@Override
 	public void tick() {
-		
+
 	}
 
 	@Override
 	public void render(Graphics g) {
-		x = (Game.GAME.getWindow().getCanvas().getWidth() / 2 - width / 2) - (BackgroundHandler.SCROLL_X - BackgroundHandler.ACTUAL_X);
-		y = (Game.GAME.getWindow().getCanvas().getHeight() / 2 - height / 2) - (BackgroundHandler.SCROLL_Y - BackgroundHandler.ACTUAL_Y);
+		x = (Game.GAME.getWindow().getCanvas().getWidth() / 2 - width / 2)
+				- (BackgroundHandler.SCROLL_X - BackgroundHandler.ACTUAL_X);
+		y = (Game.GAME.getWindow().getCanvas().getHeight() / 2 - height / 2)
+				- (BackgroundHandler.SCROLL_Y - BackgroundHandler.ACTUAL_Y);
 		if (x < 0) {
 			x = 0;
 			BackgroundHandler.SCROLL_X = Game.GAME.getWindow().getCanvas().getWidth() / 2 - width / 2;
@@ -41,12 +43,14 @@ public class Player extends GameObject {
 		}
 		if (x > Game.GAME.getWindow().getCanvas().getWidth() - width) {
 			x = Game.GAME.getWindow().getCanvas().getWidth() - width;
-			BackgroundHandler.SCROLL_X = BackgroundHandler.ACTUAL_X - (Game.GAME.getWindow().getCanvas().getWidth() / 2 - width / 2);
+			BackgroundHandler.SCROLL_X = BackgroundHandler.ACTUAL_X
+					- (Game.GAME.getWindow().getCanvas().getWidth() / 2 - width / 2);
 			BackgroundHandler.xV = 0;
 		}
 		if (y > Game.GAME.getWindow().getCanvas().getHeight() - height) {
 			y = Game.GAME.getWindow().getCanvas().getHeight() - height;
-			BackgroundHandler.SCROLL_Y = BackgroundHandler.ACTUAL_Y - (Game.GAME.getWindow().getCanvas().getHeight() / 2 - height / 2);
+			BackgroundHandler.SCROLL_Y = BackgroundHandler.ACTUAL_Y
+					- (Game.GAME.getWindow().getCanvas().getHeight() / 2 - height / 2);
 			BackgroundHandler.yV = 0;
 		}
 	}

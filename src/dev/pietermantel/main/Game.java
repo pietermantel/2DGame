@@ -17,11 +17,11 @@ public class Game implements Runnable {
 	private Thread thread;
 	private Handler handler;
 	private boolean running = false;
-	
+
 	// De huidige status van het spel.
 	public static GameState STATE = GameState.game;
 	public static Game GAME;
-	
+
 	public static final int FPS = 60;
 
 	public Game() {
@@ -31,52 +31,52 @@ public class Game implements Runnable {
 	public static void main(String[] args) {
 		GAME = new Game();
 	}
-	
+
 	public synchronized void start() {
 		thread = new Thread(this);
 		thread.start();
 		running = true;
 	}
-	
+
 	public synchronized void stop() throws InterruptedException {
 		thread.join();
 		running = false;
 	}
-	
+
 	public void init() {
 		window = new Window("Hallo", 1280, 720);
 		handler = new Handler();
 		KeyManager.init();
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
-		
+
 		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
-		
+
 		Handler.objects.add(new Player(0, 0, 0, GameState.game));
 	}
-	
+
 	public void tick() {
 		handler.tick();
 		BackgroundHandler.tick();
 	}
-	
+
 	public void render() {
 		BufferStrategy bs = window.getCanvas().getBufferStrategy();
-		if(bs == null) {
+		if (bs == null) {
 			window.getCanvas().createBufferStrategy(3);
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		
+
 		g.setColor(Color.black);
 		g.fillRect(0, 0, 1280, 720);
 		BackgroundHandler.render(g);
 		handler.render(g);
-		
+
 		g.dispose();
 		bs.show();
 	}
-	
+
 	public void run() {
 		init();
 		int frames = 0;
@@ -84,23 +84,23 @@ public class Game implements Runnable {
 		double ns = 1000000000 / FPS;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
-		while(running) {
+		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-			while(delta >= 1) {
+			while (delta >= 1) {
 				tick();
 				delta--;
 			}
-			if(running) {
+			if (running) {
 				frames++;
 			}
-			if(System.currentTimeMillis() - timer > 1000) {
+			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println("FPS: " + frames);
 				frames = 0;
 			}
-			if(running) {
+			if (running) {
 				render();
 			}
 		}

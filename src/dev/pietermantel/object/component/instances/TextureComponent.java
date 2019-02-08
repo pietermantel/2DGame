@@ -11,7 +11,7 @@ import dev.pietermantel.object.component.Component;
 public class TextureComponent extends Component {
 	private Image texture;
 	private int imgOffsetX, imgOffsetY;
-	
+
 	public TextureComponent(GameObject parent, String texturePath, int imgOffsetX, int imgOffsetY) {
 		super(parent);
 		this.imgOffsetX = imgOffsetX;
@@ -25,7 +25,7 @@ public class TextureComponent extends Component {
 
 	@Override
 	public void tick() {
-		
+
 	}
 
 	@Override
@@ -56,6 +56,5 @@ public class TextureComponent extends Component {
 	public void setImgOffsetY(int imgOffsetY) {
 		this.imgOffsetY = imgOffsetY;
 	}
-	
-	
+
 }

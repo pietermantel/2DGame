@@ -13,15 +13,15 @@ public class TestObject extends GameObject {
 		super(x, y, id, GameObjectType.TestObject, state);
 		componentManager.getComponents().add(new TextureComponent(this, "res/textures/TestObject.jpg", 0, 0));
 	}
-		
+
 	@Override
 	public void tick() {
-		
+
 	}
 
 	@Override
 	public void render(Graphics g) {
-		
+
 	}
-	
+
 }

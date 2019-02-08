@@ -1,6 +1,6 @@
 package dev.pietermantel.object;
 
 public enum GameObjectType {
-	TestObject(),
+	TestObject(), 
 	Player();
 }

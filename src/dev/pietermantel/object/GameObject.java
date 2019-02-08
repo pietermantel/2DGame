@@ -8,48 +8,53 @@ public abstract class GameObject {
 	protected int x, y, id;
 	protected GameObjectType type;
 	// Dit zijn de states waarbij dit object zichtbaar moet zijn.
-	// Het is een array omdat je misschien meerdere states wil hebben waarbij het zichtbaar is.
+	// Het is een array omdat je misschien meerdere states wil hebben waarbij het
+	// zichtbaar is.
 	protected GameState[] states;
-	// Dit regelt de components, zeg maar eigenschappen, van het object: dingen als textures, zwaartekracht, knopinteractie etc.
+	// Dit regelt de components, zeg maar eigenschappen, van het object: dingen als
+	// textures, zwaartekracht, knopinteractie etc.
 	protected ComponentManager componentManager;
-	
+
 	public GameObject(int x, int y, int id, GameObjectType type, GameState[] states) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.type = type;
 		this.states = states;
-		
+
 		componentManager = new ComponentManager();
-	}	
-	
-	// Een andere constructor met een enkele state, voor als er maar een state is. Dan is dit makkelijker.
+	}
+
+	// Een andere constructor met een enkele state, voor als er maar een state is.
+	// Dan is dit makkelijker.
 	// Je kan meerdere constructors hebben met verschillende arguments.
 	public GameObject(int x, int y, int id, GameObjectType type, GameState state) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.type = type;
-		
+
 		states = new GameState[1];
 		states[0] = state;
 		componentManager = new ComponentManager();
 	}
-	
+
 	public void manageTick() {
 		componentManager.tick();
 		tick();
 	}
-	
+
 	public void manageRender(Graphics g) {
 		componentManager.render(g);
 		render(g);
 	}
-	
-	// Abstracte methods zijn methods die een object dat dit object "extend" moet hebben.
+
+	// Abstracte methods zijn methods die een object dat dit object "extend" moet
+	// hebben.
 	public abstract void tick();
+
 	public abstract void render(Graphics g);
-	
+
 	public int getX() {
 		return x;
 	}
@@ -97,6 +102,5 @@ public abstract class GameObject {
 	public void setStates(GameState[] states) {
 		this.states = states;
 	}
-	
-	
+
 }

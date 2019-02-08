@@ -7,10 +7,10 @@ import dev.pietermantel.main.ResourceLoader;
 
 public enum Background {
 	playersBedroom("res/backgrounds/player_bedroom.jpg");
-	
+
 	private String imagePath;
 	private Image image;
-	
+
 	private Background(String imagePath) {
 		this.imagePath = imagePath;
 		try {
