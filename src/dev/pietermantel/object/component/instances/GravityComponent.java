@@ -26,11 +26,15 @@ public class GravityComponent extends Component {
 		yVel += 1;
 		if (yVel >= 0) {
 			for (int i = 0; i < yVel; i++) {
-				parent.setY(parent.getY() + 1);
+				if(!collides()) {
+					parent.setY(parent.getY() + 1);
+				}
 			}
 		} else {
 			for (int i = 0; i < -yVel; i++) {
-				parent.setY(parent.getY() - 1);
+				if(!collides()) {
+					parent.setY(parent.getY() - 1);
+				}
 			}
 		}
 	}
