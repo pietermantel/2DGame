@@ -1,12 +1,14 @@
 package dev.pietermantel.object.instances;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import dev.pietermantel.background.BackgroundHandler;
 import dev.pietermantel.main.Game;
 import dev.pietermantel.object.GameObject;
 import dev.pietermantel.object.GameObjectType;
 import dev.pietermantel.object.GameState;
+import dev.pietermantel.object.component.instances.CollisionBoxComponent;
 import dev.pietermantel.object.component.instances.TextureComponent;
 
 public class Player extends GameObject {
@@ -15,7 +17,10 @@ public class Player extends GameObject {
 	public Player(int x, int y, int id, GameState state) {
 		super(x, y, id, GameObjectType.Player, state);
 		TextureComponent tc;
+		CollisionBoxComponent cbc;
+		Rectangle cb = new Rectangle(x, y, 220, 337);
 		componentManager.getComponents().add(tc = new TextureComponent(this, "res/textures/player.png", 0, 0));
+		componentManager.getComponents().add(cbc = new CollisionBoxComponent(this, cb));
 		width = tc.getTexture().getWidth(null);
 		height = tc.getTexture().getHeight(null);
 	}
