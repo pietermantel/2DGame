@@ -17,12 +17,10 @@ public class Player extends GameObject {
 	public Player(int x, int y, int id, GameState state) {
 		super(x, y, id, GameObjectType.Player, state);
 		TextureComponent tc;
-		CollisionBoxComponent cbc;
-		Rectangle cb = new Rectangle(x, y, 220, 337);
 		componentManager.getComponents().add(tc = new TextureComponent(this, "res/textures/player.png", 0, 0));
-		componentManager.getComponents().add(cbc = new CollisionBoxComponent(this, cb));
 		width = tc.getTexture().getWidth(null);
 		height = tc.getTexture().getHeight(null);
+		componentManager.getComponents().add(new CollisionBoxComponent(this, new Rectangle(x, y, width, height), false));
 	}
 
 	@Override
