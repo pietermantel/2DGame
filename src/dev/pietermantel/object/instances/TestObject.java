@@ -25,10 +25,10 @@ public class TestObject extends GameObject {
 	@Override
 	public void tick() {
 		if(cM) {
-			if(KeyManager.pressed[KeyEvent.VK_DOWN]) y+=5;
-			if(KeyManager.pressed[KeyEvent.VK_UP]) y-=5;
-			if(KeyManager.pressed[KeyEvent.VK_RIGHT]) x+=5;
-			if(KeyManager.pressed[KeyEvent.VK_LEFT]) x-=5;
+			if(KeyManager.pressed[KeyEvent.VK_DOWN]) y+=1;
+			if(KeyManager.pressed[KeyEvent.VK_UP]) y-=1;
+			if(KeyManager.pressed[KeyEvent.VK_RIGHT]) x+=1;
+			if(KeyManager.pressed[KeyEvent.VK_LEFT]) x-=1;
 		}
 	}
 
