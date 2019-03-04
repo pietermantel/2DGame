@@ -11,7 +11,7 @@ public class CollisionBoxComponent extends Component {
 	private Rectangle[] collisionBoxes;
 	private boolean collisionMovement;
 	private int startPersonalCBs;
-	private int oldX = 0, oldY = 0, oldX2 = 0, oldY2 = 0;
+	private int oldX, oldY, oldX2, oldY2;
 	public static LinkedList<Rectangle> ALL_COLLISION_BOXES = new LinkedList<Rectangle>();
 
 	public CollisionBoxComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
