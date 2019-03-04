@@ -11,7 +11,7 @@ public class CollisionBoxComponent extends Component {
 	private Rectangle[] collisionBoxes;
 	private boolean collisionMovement;
 	private int startPersonalCBs;
-	private int oldX = 0, oldY = 0;
+	private int oldX = 0, oldY = 0, oldX2 = 0, oldY2 = 0;
 	public static LinkedList<Rectangle> ALL_COLLISION_BOXES = new LinkedList<Rectangle>();
 
 	public CollisionBoxComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
@@ -37,9 +37,11 @@ public class CollisionBoxComponent extends Component {
 	public void tick() {
 		if (collisionMovement) {
 			if (collides()) {
-				parent.setX(oldX);
-				parent.setY(oldY);
+				parent.setX(oldX2);
+				parent.setY(oldY2);
 			}
+			oldX2 = oldX;
+			oldY2 = oldY;
 			oldX = parent.getX();
 			oldY = parent.getY();
 //			if(collides())
