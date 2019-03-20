@@ -8,10 +8,10 @@ import dev.pietermantel.object.GameObject;
 import dev.pietermantel.object.component.Component;
 
 public class CollisionBoxComponent extends Component {
-	private Rectangle[] collisionBoxes;
-	private boolean collisionMovement;
-	private int startPersonalCBs;
-	private int oldX, oldY, oldX2, oldY2;
+	protected Rectangle[] collisionBoxes;
+	protected boolean collisionMovement;
+	protected int startPersonalCBs;
+	protected int oldX, oldY, oldX2, oldY2;
 	public static LinkedList<Rectangle> ALL_COLLISION_BOXES = new LinkedList<Rectangle>();
 
 	public CollisionBoxComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
@@ -52,7 +52,7 @@ public class CollisionBoxComponent extends Component {
 
 	@Override
 	public void render(Graphics g) {
-
+		g.drawRect(collisionBoxes[0].x, collisionBoxes[0].y, collisionBoxes[0].width, collisionBoxes[0].height);
 	}
 
 	public Rectangle[] getCollisionBoxes() {
@@ -63,7 +63,7 @@ public class CollisionBoxComponent extends Component {
 		this.collisionBoxes = collisionBoxes;
 	}
 
-	public boolean collides() {
+	protected boolean collides() {
 		LinkedList<Rectangle> otherCBs = new LinkedList<Rectangle>(otherCBs());
 		for (Rectangle r1 : otherCBs) {
 			for (Rectangle r2 : collisionBoxes) {
@@ -74,7 +74,7 @@ public class CollisionBoxComponent extends Component {
 		return false;
 	}
 
-	public void updateCollisionBoxes() {
+	protected void updateCollisionBoxes() {
 		for (int i = 0; i < collisionBoxes.length; i++) {
 			Rectangle temp1 = collisionBoxes[i];
 			collisionBoxes[i] = new Rectangle(parent.getX(), parent.getY(), temp1.width, temp1.height);
@@ -84,7 +84,7 @@ public class CollisionBoxComponent extends Component {
 		}
 	}
 
-	public LinkedList<Rectangle> otherCBs() {
+	protected LinkedList<Rectangle> otherCBs() {
 		LinkedList<Rectangle> out = new LinkedList<Rectangle>();
 		for (int i = 0; i < ALL_COLLISION_BOXES.size(); i++) {
 			if (!(i >= startPersonalCBs && i < startPersonalCBs + collisionBoxes.length)) {
