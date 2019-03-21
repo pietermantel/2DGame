@@ -51,7 +51,7 @@ public class Game implements Runnable {
 		KeyManager.init();
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
-		window.getCanvas().addMouseListener(new MouseWheelManager());
+		window.getCanvas().addMouseWheelListener(new MouseWheelManager());
 		
 		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
 		
