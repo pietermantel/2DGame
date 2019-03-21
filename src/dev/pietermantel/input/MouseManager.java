@@ -25,4 +25,5 @@ public class MouseManager extends MouseAdapter {
 				MouseInfo.getPointerInfo().getLocation().y
 						- Game.GAME.getWindow().getComponents()[0].getLocationOnScreen().y);
 	}
+
 }

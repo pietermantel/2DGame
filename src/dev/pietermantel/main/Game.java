@@ -8,6 +8,7 @@ import dev.pietermantel.background.Background;
 import dev.pietermantel.background.BackgroundHandler;
 import dev.pietermantel.input.KeyManager;
 import dev.pietermantel.input.MouseManager;
+import dev.pietermantel.input.MouseWheelManager;
 import dev.pietermantel.object.GameState;
 import dev.pietermantel.object.Handler;
 import dev.pietermantel.object.instances.Player;
@@ -50,6 +51,7 @@ public class Game implements Runnable {
 		KeyManager.init();
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
+		window.getCanvas().addMouseListener(new MouseWheelManager());
 		
 		BackgroundHandler.CURRENT_BACKGROUND = Background.playersBedroom;
 		
