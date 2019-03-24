@@ -52,7 +52,7 @@ public class CollisionBoxComponent extends Component {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawRect(collisionBoxes[0].x, collisionBoxes[0].y, collisionBoxes[0].width, collisionBoxes[0].height);
+		
 	}
 
 	public Rectangle[] getCollisionBoxes() {

@@ -12,29 +12,28 @@ import dev.pietermantel.object.component.instances.GravityComponent;
 import dev.pietermantel.object.component.instances.TextureComponent;
 
 public class TestObject extends GameObject {
-	
-	public boolean cM;
 
 	public TestObject(int x, int y, int id, GameState state, boolean collisionMovement) {
 		super(x, y, id, GameObjectType.TestObject, state);
 		componentManager.getComponents().add(new TextureComponent(this, "res/textures/TestObject.jpg", 0, 0));
-		componentManager.getComponents().add(new GravityComponent(this, new Rectangle(x, y, 100, 100)));
-		this.cM = collisionMovement;
+		componentManager.getComponents().add(new GravityComponent(this, new Rectangle(x, y, 100, 100), collisionMovement));
 	}
-		
+
 	@Override
 	public void tick() {
-		if(cM) {
-			if(KeyManager.pressed[KeyEvent.VK_DOWN]) y+=5;
-			if(KeyManager.pressed[KeyEvent.VK_UP]) y-=5;
-			if(KeyManager.pressed[KeyEvent.VK_RIGHT]) x+=5;
-			if(KeyManager.pressed[KeyEvent.VK_LEFT]) x-=5;
-		}
+		if (KeyManager.pressed[KeyEvent.VK_DOWN])
+			y += 5;
+		if (KeyManager.pressed[KeyEvent.VK_UP])
+			y -= 5;
+		if (KeyManager.pressed[KeyEvent.VK_RIGHT])
+			x += 5;
+		if (KeyManager.pressed[KeyEvent.VK_LEFT])
+			x -= 5;
 	}
 
 	@Override
 	public void render(Graphics g) {
-		
+
 	}
-	
+
 }

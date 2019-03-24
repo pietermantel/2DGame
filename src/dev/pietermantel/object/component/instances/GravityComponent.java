@@ -9,13 +9,13 @@ public class GravityComponent extends CollisionBoxComponent {
 	private int yVel = 0;
 	private Rectangle[] collisionBoxes;
 
-	public GravityComponent(GameObject parent, Rectangle[] collisionBoxes) {
-		super(parent, collisionBoxes, false);
+	public GravityComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
+		super(parent, collisionBoxes, collisionMovement);
 		this.collisionBoxes = collisionBoxes;
 	}
 
-	public GravityComponent(GameObject parent, Rectangle collisionBox) {
-		super(parent, collisionBox, false);
+	public GravityComponent(GameObject parent, Rectangle collisionBox, boolean collisionMovement) {
+		super(parent, collisionBox, collisionMovement);
 		collisionBoxes = new Rectangle[1];
 		collisionBoxes[0] = collisionBox;
 	}
@@ -43,6 +43,6 @@ public class GravityComponent extends CollisionBoxComponent {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawRect(collisionBoxes[0].x, collisionBoxes[0].y, collisionBoxes[0].width, collisionBoxes[0].height);
+		
 	}
 }
