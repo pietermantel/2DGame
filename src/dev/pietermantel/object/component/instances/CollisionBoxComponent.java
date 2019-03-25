@@ -1,5 +1,6 @@
 package dev.pietermantel.object.component.instances;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ public class CollisionBoxComponent extends Component {
 	protected Rectangle[] collisionBoxes;
 	protected boolean collisionMovement;
 	protected int startPersonalCBs;
-	protected int oldX, oldY, oldX2, oldY2;
+	protected int oldX, oldY;
 	public static LinkedList<Rectangle> ALL_COLLISION_BOXES = new LinkedList<Rectangle>();
 
 	public CollisionBoxComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
@@ -35,13 +36,12 @@ public class CollisionBoxComponent extends Component {
 
 	@Override
 	public void tick() {
+		updateCollisionBoxes();
 		if (collisionMovement) {
 			if (collides()) {
-				parent.setX(oldX2);
-				parent.setY(oldY2);
+				parent.setX(oldX);
+				parent.setY(oldY);
 			}
-			oldX2 = oldX;
-			oldY2 = oldY;
 			oldX = parent.getX();
 			oldY = parent.getY();
 //			if(collides())
@@ -52,7 +52,9 @@ public class CollisionBoxComponent extends Component {
 
 	@Override
 	public void render(Graphics g) {
-		
+		Rectangle[] cb = getCollisionBoxes();
+		g.setColor(Color.red);
+		g.drawRect(cb[0].x, cb[0].y, cb[0].width, cb[0].height);
 	}
 
 	public Rectangle[] getCollisionBoxes() {

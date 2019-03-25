@@ -1,5 +1,6 @@
 package dev.pietermantel.object.component.instances;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -25,24 +26,30 @@ public class GravityComponent extends CollisionBoxComponent {
 		yVel += 1;
 		if (yVel >= 0) {
 			for (int i = 0; i < yVel; i++) {
+				super.updateCollisionBoxes();
 				if(!super.collides()) {
 					parent.setY(parent.getY() + 1);
 				}
 			}
 		} else {
 			for (int i = 0; i < -yVel; i++) {
+				super.updateCollisionBoxes();
 				if(!super.collides()) {
 					parent.setY(parent.getY() - 1);
 				}
 			}
 		}
-		if(super.collides()) yVel = 0;
 		super.updateCollisionBoxes();
+		if(super.collides()) {
+			yVel = 0;
+			parent.setY(parent.getY() - 1);
+		}
 		collisionBoxes = super.collisionBoxes;
+		super.tick();
 	}
 
 	@Override
 	public void render(Graphics g) {
-		
+		super.render(g);
 	}
 }
