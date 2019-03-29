@@ -2,32 +2,31 @@ package dev.pietermantel.object.component.instances;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import dev.pietermantel.object.GameObject;
 import dev.pietermantel.object.component.Component;
 
 public class CollisionBoxComponent extends Component {
-	protected Rectangle[] collisionBoxes;
+	protected CollisionBox[] collisionBoxes;
 	protected boolean collisionMovement;
 	protected int startPersonalCBs;
 	protected int oldX, oldY;
-	public static LinkedList<Rectangle> ALL_COLLISION_BOXES = new LinkedList<Rectangle>();
+	public static LinkedList<CollisionBox> ALL_COLLISION_BOXES = new LinkedList<CollisionBox>();
 
-	public CollisionBoxComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
+	public CollisionBoxComponent(GameObject parent, CollisionBox[] collisionBoxes, boolean collisionMovement) {
 		super(parent);
 		this.collisionBoxes = collisionBoxes;
 		startPersonalCBs = ALL_COLLISION_BOXES.size();
-		for (Rectangle rectangle : collisionBoxes) {
-			ALL_COLLISION_BOXES.add(rectangle);
+		for (CollisionBox collisionBox : collisionBoxes) {
+			ALL_COLLISION_BOXES.add(collisionBox);
 		}
 		this.collisionMovement = collisionMovement;
 	}
 
-	public CollisionBoxComponent(GameObject parent, Rectangle collisionBox, boolean collisionMovement) {
+	public CollisionBoxComponent(GameObject parent, CollisionBox collisionBox, boolean collisionMovement) {
 		super(parent);
-		collisionBoxes = new Rectangle[1];
+		collisionBoxes = new CollisionBox[1];
 		collisionBoxes[0] = collisionBox;
 		startPersonalCBs = ALL_COLLISION_BOXES.size();
 		ALL_COLLISION_BOXES.add(collisionBox);
@@ -52,24 +51,25 @@ public class CollisionBoxComponent extends Component {
 
 	@Override
 	public void render(Graphics g) {
-		Rectangle[] cb = getCollisionBoxes();
 		g.setColor(Color.red);
-		g.drawRect(cb[0].x, cb[0].y, cb[0].width, cb[0].height);
+		for(CollisionBox c : collisionBoxes) {
+			g.drawRect((int) c.getX(), (int) c.getY(), c.width, c.height);
+		}
 	}
 
-	public Rectangle[] getCollisionBoxes() {
+	public CollisionBox[] getCollisionBoxes() {
 		return collisionBoxes;
 	}
 
-	public void setCollisionBoxes(Rectangle[] collisionBoxes) {
+	public void setCollisionBoxes(CollisionBox[] collisionBoxes) {
 		this.collisionBoxes = collisionBoxes;
 	}
 
 	protected boolean collides() {
-		LinkedList<Rectangle> otherCBs = new LinkedList<Rectangle>(otherCBs());
-		for (Rectangle r1 : otherCBs) {
-			for (Rectangle r2 : collisionBoxes) {
-				if (r1.intersects(r2))
+		LinkedList<CollisionBox> otherCBs = new LinkedList<CollisionBox>(otherCBs());
+		for (CollisionBox c1 : otherCBs) {
+			for (CollisionBox c2 : collisionBoxes) {
+				if (c1.intersects(c2))
 					return true;
 			}
 		}
@@ -78,16 +78,16 @@ public class CollisionBoxComponent extends Component {
 
 	protected void updateCollisionBoxes() {
 		for (int i = 0; i < collisionBoxes.length; i++) {
-			Rectangle temp1 = collisionBoxes[i];
-			collisionBoxes[i] = new Rectangle(parent.getX(), parent.getY(), temp1.width, temp1.height);
+			collisionBoxes[i].x = parent.getX();
+			collisionBoxes[i].y = parent.getY();
 		}
 		for (int i = 0; i < collisionBoxes.length; i++) {
 			ALL_COLLISION_BOXES.set(i + startPersonalCBs, collisionBoxes[i]);
 		}
 	}
 
-	protected LinkedList<Rectangle> otherCBs() {
-		LinkedList<Rectangle> out = new LinkedList<Rectangle>();
+	protected LinkedList<CollisionBox> otherCBs() {
+		LinkedList<CollisionBox> out = new LinkedList<CollisionBox>();
 		for (int i = 0; i < ALL_COLLISION_BOXES.size(); i++) {
 			if (!(i >= startPersonalCBs && i < startPersonalCBs + collisionBoxes.length)) {
 				out.add(ALL_COLLISION_BOXES.get(i));

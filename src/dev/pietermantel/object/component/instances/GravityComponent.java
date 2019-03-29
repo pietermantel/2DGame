@@ -1,23 +1,21 @@
 package dev.pietermantel.object.component.instances;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 import dev.pietermantel.object.GameObject;
 
 public class GravityComponent extends CollisionBoxComponent {
 	private int yVel = 0;
-	private Rectangle[] collisionBoxes;
+	private CollisionBox[] collisionBoxes;
 
-	public GravityComponent(GameObject parent, Rectangle[] collisionBoxes, boolean collisionMovement) {
+	public GravityComponent(GameObject parent, CollisionBox[] collisionBoxes, boolean collisionMovement) {
 		super(parent, collisionBoxes, collisionMovement);
 		this.collisionBoxes = collisionBoxes;
 	}
 
-	public GravityComponent(GameObject parent, Rectangle collisionBox, boolean collisionMovement) {
+	public GravityComponent(GameObject parent, CollisionBox collisionBox, boolean collisionMovement) {
 		super(parent, collisionBox, collisionMovement);
-		collisionBoxes = new Rectangle[1];
+		collisionBoxes = new CollisionBox[1];
 		collisionBoxes[0] = collisionBox;
 	}
 
