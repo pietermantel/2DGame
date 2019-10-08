@@ -8,5 +8,14 @@ public class Point {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Point() {
+		this.x = 0;
+		this.y = 0;
+	}
+	
+	public Vector2 asVector2() {
+		return new Vector2(x, y);
+	}
 
 }

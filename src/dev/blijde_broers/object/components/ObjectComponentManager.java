@@ -10,13 +10,17 @@ public class ObjectComponentManager {
 	// Deze class zorgt ervoor dat de components - de eigenschappen van een object -
 	// allemaal geupdate worden.
 	
-	private int collisionComponentIndex;
+	private int collisionComponentIndex = -1;
 	
 	private ArrayList<ObjectComponent> objectComponents = new ArrayList<ObjectComponent>();
+	
+	public ObjectComponentManager() {
+		
+	}
 
 	public void tick() {
-		for (ObjectComponent objectComponent : objectComponents) {
-			objectComponent.tick();
+		for (int i = 0; i < objectComponents.size(); i++) {
+			objectComponents.get(i).tick();
 		}
 	}
 
@@ -34,17 +38,20 @@ public class ObjectComponentManager {
 		this.objectComponents = objectComponents;
 	}
 	
-	public void addCollisionComponent(CollisionComponent cc) {
-		collisionComponentIndex = objectComponents.size();
-		objectComponents.add(cc);
+	public void addObjectComponent(ObjectComponent c) {
+		if(c instanceof CollisionComponent) {
+			collisionComponentIndex = objectComponents.size();
+		}
+		objectComponents.add(c);
 	}
 	
 	public CollisionComponent getCollisionComponent() {
-		if(objectComponents.get(collisionComponentIndex) != null) {
-			return (CollisionComponent) objectComponents.get(collisionComponentIndex);
-		} else {
-			return new CollisionComponent(null, new EmptyCollisionTemplate());
+		if (collisionComponentIndex != -1) {
+			if (objectComponents.get(collisionComponentIndex) != null) {
+				return (CollisionComponent) objectComponents.get(collisionComponentIndex);
+			} 
 		}
+		return new CollisionComponent(null, new EmptyCollisionTemplate());
 		
 	}
 	

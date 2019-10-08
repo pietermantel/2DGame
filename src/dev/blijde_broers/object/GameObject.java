@@ -43,11 +43,11 @@ public abstract class GameObject {
 	
 	
 	public int getActualX() {
-		return (int) (((transform.x - Game.GAME.getMainCamera().transform.x) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getWidth() / 2 - Game.GAME.getMainCamera().zoom / 2);
+		return (int) (((transform.mid.x - Game.GAME.getMainCamera().transform.mid.x) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getWidth() / 2 - Game.GAME.getMainCamera().zoom / 2);
 	}
 	
 	public int getActualY() {
-		return (int) (((transform.y - Game.GAME.getMainCamera().transform.y) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getHeight() / 2 - Game.GAME.getMainCamera().zoom / 2);
+		return (int) (((transform.mid.y - Game.GAME.getMainCamera().transform.mid.y) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getHeight() / 2 - Game.GAME.getMainCamera().zoom / 2);
 	}
 	
 	public GameState[] getStates() {

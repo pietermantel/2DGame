@@ -17,7 +17,6 @@ public class Menu {
 	
 	public void tick() {
 		if(start.clicked()) {
-			Game.GAME.setup();
 			Game.STATE = GameState.Game;
 		}
 		if(exit.clicked()) {

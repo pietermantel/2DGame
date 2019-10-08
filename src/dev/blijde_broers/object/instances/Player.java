@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import dev.blijde_broers.input.KeyManager;
 import dev.blijde_broers.misc.collisionTemplates.instances.Rectangle;
 import dev.blijde_broers.misc.math.Transform;
+import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.GameObjectType;
 import dev.blijde_broers.object.GameState;
@@ -16,29 +17,29 @@ public class Player extends GameObject {
 
 	public Player(Transform transform) {
 		super(transform, 0, GameObjectType.Player, GameState.Game);
-		componentManager.getObjectComponents().add(new TextureComponent(this, "res\\textures\\player.png", true, new Transform(0, 0, 2.2f, 3.37f)));
-		componentManager.addCollisionComponent(new CollisionComponent(this, new Rectangle(transform, new Transform(0, 0, 2.2f, 3.37f))));
+		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\player.png", new Transform(new Vector2(), transform.getDimensions())));
+		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions()))));
 	}
 
 	@Override
 	public void tick() {
 		if(KeyManager.pressed[KeyEvent.VK_S]) {
-			transform.moveOnRelativeYAxis(-0.1f);
+			transform.increment(new Vector2(0, 3).rotate(transform.getRotation()));
 		}
 		if(KeyManager.pressed[KeyEvent.VK_W]) {
-			transform.moveOnRelativeYAxis(0.1f);
+			transform.increment(new Vector2(0, -3).rotate(transform.getRotation()));
 		}
 		if(KeyManager.pressed[KeyEvent.VK_D]) {
-			transform.rotation += 0.1;
+			transform.rotate(0.05);
 		}
 		if(KeyManager.pressed[KeyEvent.VK_A]) {
-			transform.rotation -= 0.1;
+			transform.rotate(-0.05);
 		}
 	}
 
 	@Override
 	public void render(Graphics g) {
-		
+//		transform.render(g);
 	}
 
 }
