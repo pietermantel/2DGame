@@ -18,27 +18,30 @@ public abstract class CollisionTemplate {
 		// updateRibs();
 		calcRadius();
 	}
+	
+	public CollisionTemplate() {
+		
+	}
 
-	public CollisionTemplate intersects(CollisionTemplate collisionTemplate) {
-		updateRibs();
+	public boolean intersects(CollisionTemplate collisionTemplate) {
 		if (finishedInit) {
 			if (Math2D.dist(getTransform().mid.asPoint(),
 					collisionTemplate.getTransform().mid.asPoint()) < (radius + collisionTemplate.radius)) {
 				checking = true;
 				for (Line thisL : ribs) {
 					for (Line otherL : collisionTemplate.ribs) {
-						if (otherL != null) {
+						if (otherL != null && thisL != null) {
 							if (thisL.intersects(otherL)) {
-								return collisionTemplate;
+								return true;
 							} 
 						}
 					}
 				}
-				return null;
+				return false;
 			}
 		}
 		finishedInit = true;
-		return null;
+		return false;
 	}
 
 	// Updates all lines to their absolute coordinates. This is done by adding the
@@ -60,7 +63,7 @@ public abstract class CollisionTemplate {
 		}
 	}
 	
-	private void calcRadius() {
+	public void calcRadius() {
 		radius = 0;
 		for (Vector2 c : corners) {
 			double tempRadius = Math2D.dist(new Point(), c.asPoint());

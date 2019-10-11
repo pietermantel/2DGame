@@ -28,8 +28,9 @@ public class Game implements Runnable {
 	@SuppressWarnings("unused")
 	private int fps;
 	private boolean esc;
+	private boolean fthree;
 	
-	public boolean debug = false;
+	public static boolean debug = false;
 	
 	// De huidige status van het spel.
 	public static GameState STATE = GameState.Menu;
@@ -72,10 +73,10 @@ public class Game implements Runnable {
 	public void setup() {
 		handler.removeAll();
 		Handler.objects.add(new Player(new Transform(new Vector2(), new Vector2(220, 337))));
-		Handler.objects.add(new TestObject(new Transform(new Vector2(), new Vector2(100, 100))));
-//		for(int i = 0; i < 100; i++) {
-//			Handler.objects.add(new TestObject(new Transform(new Vector2(ExtendedMath.random(-1000, 1000), ExtendedMath.random(-1000, 1000)), new Vector2(100, 100))));
-//		}
+//		Handler.objects.add(new TestObject(new Transform(new Vector2(), new Vector2(100, 100))));
+		for(int i = 0; i < 100; i++) {
+			Handler.objects.add(new TestObject(new Transform(new Vector2(ExtendedMath.random(-1000, 1000), ExtendedMath.random(-1000, 1000)), new Vector2(100, 100))));
+		}
 	}
 	
 	public void tick() {
@@ -93,7 +94,7 @@ public class Game implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		
 		g.setColor(Color.black);
-		g.fillRect(0, 0, 1280, 720);
+		g.fillRect(0, 0, window.getWidth(), window.getHeight());
 		g.setColor(Color.white);
 		
 		handler.render(g);
@@ -170,16 +171,16 @@ public class Game implements Runnable {
 //				STATE = GameState.Game;
 			}
 		}
-		temp = debug;
-		debug = false;
+		temp = fthree;
+		fthree = false;
 		if(KeyManager.pressed[KeyEvent.VK_F3]) {
-			debug = true;
+			fthree = true;
 		}
-		if(debug == true && temp == false) {
-			if(STATE == GameState.Game) {
-				STATE = GameState.Menu;
+		if(fthree == true && temp == false) {
+			if(debug) {
+				debug = false;
 			} else {
-//				STATE = GameState.Game;
+				debug = true;
 			}
 		}
 	}
