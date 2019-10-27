@@ -1,4 +1,4 @@
-package dev.blijde_broers.misc.collisionTemplates;
+package dev.blijde_broers.misc.collisionComponentParts;
 
 import dev.blijde_broers.misc.math.*;
 import dev.blijde_broers.object.components.instances.CollisionComponent;
@@ -42,6 +42,28 @@ public abstract class CollisionTemplate {
 		}
 		finishedInit = true;
 		return false;
+	}
+	
+	public Point intersection(CollisionTemplate collisionTemplate) {
+		if (finishedInit) {
+			if (Math2D.dist(getTransform().mid.asPoint(),
+					collisionTemplate.getTransform().mid.asPoint()) < (radius + collisionTemplate.radius)) {
+				checking = true;
+				for (Line thisL : ribs) {
+					for (Line otherL : collisionTemplate.ribs) {
+						if (otherL != null && thisL != null) {
+							Point intersection;
+							if ((intersection = thisL.intersection(otherL)) != null) {
+								return intersection;
+							} 
+						}
+					}
+				}
+				return null;
+			}
+		}
+		finishedInit = true;
+		return null;
 	}
 
 	// Updates all lines to their absolute coordinates. This is done by adding the
@@ -90,7 +112,9 @@ public abstract class CollisionTemplate {
 	}
 
 	public Transform getTransform() {
+		if(parent.getParent() != null)
 		return parent.getParent().getTransform();
+		return new Transform();
 	}
 
 	public CollisionComponent getParent() {

@@ -3,14 +3,15 @@ package dev.blijde_broers.object.components;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import dev.blijde_broers.misc.collisionTemplates.instances.EmptyCollisionTemplate;
+import dev.blijde_broers.misc.collisionComponentParts.instances.EmptyCollisionTemplate;
 import dev.blijde_broers.object.components.instances.CollisionComponent;
+import dev.blijde_broers.object.components.instances.RigidBody;
 
 public class ObjectComponentManager {
 	// Deze class zorgt ervoor dat de components - de eigenschappen van een object -
 	// allemaal geupdate worden.
 	
-	private int collisionComponentIndex = -1;
+	private int collisionComponentIndex = -1, rigidBodyIndex = -1;
 	
 	private ArrayList<ObjectComponent> objectComponents = new ArrayList<ObjectComponent>();
 	
@@ -42,17 +43,31 @@ public class ObjectComponentManager {
 		if(c instanceof CollisionComponent) {
 			collisionComponentIndex = objectComponents.size();
 		}
+		if(c instanceof RigidBody) {
+			rigidBodyIndex = objectComponents.size();
+		}
 		objectComponents.add(c);
 	}
 	
 	public CollisionComponent getCollisionComponent() {
 		if (collisionComponentIndex != -1) {
-			if (objectComponents.get(collisionComponentIndex) != null) {
-				return (CollisionComponent) objectComponents.get(collisionComponentIndex);
+			CollisionComponent component;
+			if ((component = (CollisionComponent) objectComponents.get(collisionComponentIndex)) != null) {
+				return component;
 			} 
 		}
 		return new CollisionComponent(null, new EmptyCollisionTemplate());
 		
+	}
+	
+	public RigidBody getRigidBody() {
+		if (rigidBodyIndex != -1) {
+			RigidBody component;
+			if ((component = (RigidBody) objectComponents.get(rigidBodyIndex)) != null) {
+				return component;
+			} 
+		}
+		return null;
 	}
 	
 	

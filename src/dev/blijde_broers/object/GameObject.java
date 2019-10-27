@@ -2,13 +2,12 @@ package dev.blijde_broers.object;
 
 import java.awt.Graphics;
 
-import dev.blijde_broers.main.Game;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.object.components.ObjectComponentManager;
 
 public abstract class GameObject {
 	
-	protected Transform transform;
+	protected Transform transform = new Transform();
 	protected int id;
 	protected GameObjectType type;
 	protected GameState[] states;
@@ -40,15 +39,6 @@ public abstract class GameObject {
 	}
 	public abstract void tick();
 	public abstract void render(Graphics g);
-	
-	
-	public int getActualX() {
-		return (int) (((transform.mid.x - Game.GAME.getMainCamera().transform.mid.x) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getWidth() / 2 - Game.GAME.getMainCamera().zoom / 2);
-	}
-	
-	public int getActualY() {
-		return (int) (((transform.mid.y - Game.GAME.getMainCamera().transform.mid.y) * Game.GAME.getMainCamera().zoom) + Game.GAME.getWindow().getHeight() / 2 - Game.GAME.getMainCamera().zoom / 2);
-	}
 	
 	public GameState[] getStates() {
 		return states;

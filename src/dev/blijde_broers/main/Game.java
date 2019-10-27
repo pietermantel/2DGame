@@ -6,13 +6,14 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.LinkedList;
 
-import dev.blijde_broers.camera.MainCamera;
 import dev.blijde_broers.input.KeyManager;
 import dev.blijde_broers.input.MouseManager;
 import dev.blijde_broers.input.MouseWheelManager;
 import dev.blijde_broers.misc.math.ExtendedMath;
+import dev.blijde_broers.misc.math.Math2D;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
+import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.GameState;
 import dev.blijde_broers.object.Handler;
 import dev.blijde_broers.object.instances.Player;
@@ -22,7 +23,7 @@ public class Game implements Runnable {
 	private Window window;
 	private Thread thread;
 	private Handler handler;
-	private MainCamera mainCamera;
+	private LoadingScreen loadingScreen;
 	private boolean running = false;
 	
 	@SuppressWarnings("unused")
@@ -30,13 +31,13 @@ public class Game implements Runnable {
 	private boolean esc;
 	private boolean fthree;
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 	
 	// De huidige status van het spel.
 	public static GameState STATE = GameState.Menu;
 	public static Game GAME;
 	
-	public static final int FPS = 60;
+	public static final int TPS = 60;
 
 	public Game() {
 		start();
@@ -59,28 +60,42 @@ public class Game implements Runnable {
 	
 	public void init() {
 		window = new Window("New Game", (int) (1280 * 0.8), (int) (720 * 0.8));
+		loadingScreen = new LoadingScreen();
+		loadingScreen.start();
+		loadingScreen.percentageDone = 0;
 		window.getCanvas().addKeyListener(new KeyManager());
 		window.getCanvas().addMouseListener(new MouseManager());
 		window.getCanvas().addMouseWheelListener(new MouseWheelManager());
 		
+		loadingScreen.percentageDone = 33;
+		
 		handler = new Handler();
-		mainCamera = new MainCamera(new Transform(new Vector2(0, 0)));
+		
+		loadingScreen.percentageDone = 67;
 		
 		setup();
 		System.out.println(Handler.objects.size());
+		
+		loadingScreen.percentageDone = 100;
+		try {
+			loadingScreen.stop();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setup() {
 		handler.removeAll();
 		Handler.objects.add(new Player(new Transform(new Vector2(), new Vector2(220, 337))));
-//		Handler.objects.add(new TestObject(new Transform(new Vector2(), new Vector2(100, 100))));
-		for(int i = 0; i < 100; i++) {
-			Handler.objects.add(new TestObject(new Transform(new Vector2(ExtendedMath.random(-1000, 1000), ExtendedMath.random(-1000, 1000)), new Vector2(100, 100))));
+		Handler.objects.add(new TestObject(new Transform(new Vector2(300, 300), new Vector2(100, 100))));
+		for(int i = 0; i < 20; i++) {
+			GameObject temp = new TestObject(new Transform(new Vector2(ExtendedMath.random(-1000, 1000), ExtendedMath.random(-1000, 1000)), new Vector2(100, 100)));
+			temp.getComponentManager().getRigidBody().addPosForce(new Vector2(1, 0).rotate(Math.random() * 2 * Math.PI));
+			Handler.objects.add(temp);
 		}
 	}
 	
 	public void tick() {
-		mainCamera.tick();
 		handler.tick();
 		toggleStates();
 	}
@@ -99,6 +114,9 @@ public class Game implements Runnable {
 		
 		handler.render(g);
 		
+		g.setColor(Color.white);
+		g.drawString(Double.toString(Handler.mainCamera.zoom), 10, 20);
+		
 		g.dispose();
 		bs.show();
 	}
@@ -107,7 +125,7 @@ public class Game implements Runnable {
 		init();
 		int frames = 0;
 		long lastTime = System.nanoTime();
-		double ns = 1000000000 / FPS;
+		double ns = 1000000000 / TPS;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
 		
@@ -183,6 +201,13 @@ public class Game implements Runnable {
 				debug = true;
 			}
 		}
+		if(KeyManager.pressed[KeyEvent.VK_R]) {
+			for(GameObject object : Handler.objects) {
+				object.getTransform().mid = new Vector2(Math2D.randomPoint().asVector2().multiply(2000));
+				object.getComponentManager().getRigidBody().getPosVel().x = 0;
+				object.getComponentManager().getRigidBody().getPosVel().y = 0;
+			}
+		}
 	}
 
 	public Window getWindow() {
@@ -215,13 +240,5 @@ public class Game implements Runnable {
 
 	public void setHandler(Handler handler) {
 		this.handler = handler;
-	}
-
-	public MainCamera getMainCamera() {
-		return mainCamera;
-	}
-
-	public void setMainCamera(MainCamera mainCamera) {
-		this.mainCamera = mainCamera;
 	}
 }

@@ -9,5 +9,9 @@ public class Math2D {
 	public static Point randomPoint(Vector2 min, Vector2 max) {
 		return new Point(ExtendedMath.random(min.x, max.x), ExtendedMath.random(min.y, max.y));
 	}
+	
+	public static Point randomPoint() {
+		return new Point((float) Math.random(), (float) Math.random());
+	}
 
 }

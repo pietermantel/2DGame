@@ -2,7 +2,7 @@ package dev.blijde_broers.misc.math;
 
 public class Vector2 {
 	
-	public float x, y;
+	public float x = 0, y = 0;
 
 	public Vector2(float x, float y) {
 		this.x = x;
@@ -12,6 +12,11 @@ public class Vector2 {
 	public Vector2(Vector2 v) {
 		this.x = v.x;
 		this.y = v.y;
+	}
+	
+	public Vector2(Point p1, Point p2) {
+		x = p2.x - p1.x;
+		y = p2.y - p1.y;
 	}
 	
 	public Vector2() {
@@ -49,16 +54,22 @@ public class Vector2 {
 		return new Vector2(x, y);
 	}
 	
-	public void setDirection(double direction) {
+	public Vector2 setDirection(double direction) {
 		double r = Math2D.dist(new Point(), this.asPoint());
 		x = (float) (r * Math.cos(direction));
 		y = (float) (r * Math.sin(direction));
+		return new Vector2(x, y);
 	}
 	
-	public void setDirection(double direction, Point p) {
+	public Vector2 setDirection(double direction, Point p) {
 		double r = Math2D.dist(p, this.asPoint());
 		x = (float) (r * Math.cos(direction) + p.x);
 		y = (float) (r * Math.sin(direction) + p.y);
+		return new Vector2(x, y);
+	}
+	
+	public double getDirection() {
+		return Math.atan2(y, x);
 	}
 	
 	public void increment(Vector2 v) {
@@ -87,6 +98,10 @@ public class Vector2 {
 	public void divideThis(float a) {
 		x /= a;
 		y /= a;
+	}
+
+	public Vector2 divide(float a) {
+		return new Vector2(x /= a, y /= a);
 	}
 
 }

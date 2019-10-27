@@ -1,6 +1,6 @@
-package dev.blijde_broers.misc.collisionTemplates.instances;
+package dev.blijde_broers.misc.collisionComponentParts.instances;
 
-import dev.blijde_broers.misc.collisionTemplates.CollisionTemplate;
+import dev.blijde_broers.misc.collisionComponentParts.CollisionTemplate;
 import dev.blijde_broers.misc.math.Transform;
 
 public class Circle extends CollisionTemplate {
