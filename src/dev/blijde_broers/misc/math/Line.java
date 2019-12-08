@@ -40,7 +40,7 @@ public class Line {
 	}
 	
 	public Line add(Vector2 v) {
-		return new Line(v1.add(v), v2.add(v));
+		return new Line(v1.plus(v), v2.plus(v));
 	}
 
 }

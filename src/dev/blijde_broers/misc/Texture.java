@@ -8,6 +8,8 @@ import dev.blijde_broers.main.ResourceLoader;
 
 public class Texture {
 	
+	public static Texture dot = new Texture("res\\textures\\dot.png");
+	
 	public static LinkedList<Texture> textures = new LinkedList<Texture>();
 	public Image img;
 	public String imagePath;

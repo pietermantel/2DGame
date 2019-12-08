@@ -82,7 +82,7 @@ public class Transform {
 	}
 	
 	public Transform add(Transform tr) {
-		return new Transform(mid.add(tr.mid), rotation + tr.rotation);
+		return new Transform(mid.plus(tr.mid), rotation + tr.rotation);
 	}
 	
 	public void increment(Transform tr) {

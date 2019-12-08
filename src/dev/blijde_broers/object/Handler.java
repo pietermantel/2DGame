@@ -18,8 +18,8 @@ public class Handler {
 	public static MainCamera mainCamera = new MainCamera(new Transform());
 
 	public void removeAll() {
-		for (int i = 0; i < objects.size(); i++) {
-			objects.remove(i);
+		while(objects.size() > 0) {
+			objects.remove(0);
 		}
 	}
 

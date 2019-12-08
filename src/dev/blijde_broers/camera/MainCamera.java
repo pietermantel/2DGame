@@ -25,7 +25,7 @@ public class MainCamera extends GameObject {
 
 	public MainCamera(Transform transform) {
 		super(transform, 0, GameObjectType.MainCamera, STATES);
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.2f, 0, 1f, false));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.2f, 0, 1f, false, false));
 		rigidBody = componentManager.getRigidBody();
 	}
 	

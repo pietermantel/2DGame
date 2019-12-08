@@ -72,15 +72,15 @@ public abstract class CollisionTemplate {
 		if (corners.length > 0) {
 			for (int i = 0; i < corners.length - 1; i++) {
 				ribs[i] = new Line(
-						corners[i].add(getTransform().mid).rotate(getTransform().getRotation(),
+						corners[i].plus(getTransform().mid).rotate(getTransform().getRotation(),
 								getTransform().mid.asPoint()),
-						corners[i + 1].add(getTransform().mid).rotate(getTransform().getRotation(),
+						corners[i + 1].plus(getTransform().mid).rotate(getTransform().getRotation(),
 								getTransform().mid.asPoint()));
 			}
 			ribs[corners.length - 1] = new Line(
-					corners[corners.length - 1].add(getTransform().mid).rotate(getTransform().getRotation(),
+					corners[corners.length - 1].plus(getTransform().mid).rotate(getTransform().getRotation(),
 							getTransform().mid.asPoint()),
-					corners[0].add(getTransform().mid).rotate(getTransform().getRotation(),
+					corners[0].plus(getTransform().mid).rotate(getTransform().getRotation(),
 							getTransform().mid.asPoint()));
 		}
 	}

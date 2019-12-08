@@ -5,4 +5,5 @@ public enum GameObjectType {
 	TestObject, 
 	MainCamera,
 	RotationTest,
+	Wall,
 }

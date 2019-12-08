@@ -14,6 +14,11 @@ public class Vector2 {
 		this.y = v.y;
 	}
 	
+	public Vector2(Vector2 v1, Vector2 v2) {
+		x = v2.x - v1.x;
+		y = v2.y - v1.y;
+	}
+	
 	public Vector2(Point p1, Point p2) {
 		x = p2.x - p1.x;
 		y = p2.y - p1.y;
@@ -28,8 +33,12 @@ public class Vector2 {
 		return new Point(x, y);
 	}
 	
-	public Vector2 add(Vector2 v) {
+	public Vector2 plus(Vector2 v) {
 		return new Vector2(x + v.x, y + v.y);
+	}
+	
+	public Vector2 minus(Vector2 v) {
+		return new Vector2(x - v.x, y - v.y);
 	}
 	
 	public String toString() {
@@ -66,6 +75,10 @@ public class Vector2 {
 		x = (float) (r * Math.cos(direction) + p.x);
 		y = (float) (r * Math.sin(direction) + p.y);
 		return new Vector2(x, y);
+	}
+	
+	public float getDist() {
+		return (float) Math.sqrt((x * x + y * y));
 	}
 	
 	public double getDirection() {

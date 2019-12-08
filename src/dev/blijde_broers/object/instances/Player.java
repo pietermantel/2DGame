@@ -22,7 +22,7 @@ public class Player extends GameObject {
 		super(transform, 0, GameObjectType.Player, GameState.Game);
 		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\player.png", new Transform(new Vector2(), transform.getDimensions())));
 		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions()))));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.6f, 0.5f, 10f, true));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.2f, 0.3f, 10f, true, true));
 		rigidBody = componentManager.getRigidBody();
 	}
 
@@ -38,12 +38,13 @@ public class Player extends GameObject {
 		}
 		if(KeyManager.pressed[KeyEvent.VK_D]) {
 //			transform.rotate(0.05);
-			rigidBody.addRotForce(0.04);
+			rigidBody.addRotForce(0.1);
 		}
 		if(KeyManager.pressed[KeyEvent.VK_A]) {
 //			transform.rotate(-0.05);
-			rigidBody.addRotForce(-0.04);
+			rigidBody.addRotForce(-0.1);
 		}
+//		System.out.println(rigidBody.getPosVel());
 	}
 
 	@Override

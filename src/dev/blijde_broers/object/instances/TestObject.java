@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import dev.blijde_broers.input.KeyManager;
 import dev.blijde_broers.misc.collisionComponentParts.instances.MultiCorner;
+import dev.blijde_broers.misc.collisionComponentParts.instances.Rectangle;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.GameObject;
@@ -20,9 +21,9 @@ public class TestObject extends GameObject {
 
 	public TestObject(Transform transform) {
 		super(transform, 0, GameObjectType.TestObject, GameState.Game);
-		componentManager.addObjectComponent(new CollisionComponent(this, new MultiCorner(new Transform(new Vector2(), transform.getDimensions().multiply(1.5f), 0), 5)));
+		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions().multiply(1.3f), 0))));
 		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\TestObject.jpg", new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, false, false, false, 0.3f, 0.4f, 10f, true));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.3f, 0.4f, 10f, true, true));
 		rigidBody = componentManager.getRigidBody();
 	}
 
@@ -30,20 +31,28 @@ public class TestObject extends GameObject {
 	public void tick() {
 		if(KeyManager.pressed[KeyEvent.VK_K]) {
 //			transform.increment(new Vector2(0, 3).rotate(transform.getRotation()));
-			rigidBody.addPosForce((new Vector2(0, 3).rotate(transform.getRotation())));
+//			rigidBody.addPosForce((new Vector2(0, 3).rotate(transform.getRotation())));
+			rigidBody.addPosForce(new Vector2(0, 10));
 		}
 		if(KeyManager.pressed[KeyEvent.VK_I]) {
 //			transform.increment(new Vector2(0, -3).rotate(transform.getRotation()));
-			rigidBody.addPosForce((new Vector2(0, -3).rotate(transform.getRotation())));
+//			rigidBody.addPosForce((new Vector2(0, -3).rotate(transform.getRotation())));
+			rigidBody.addPosForce(new Vector2(0, -10));
 		}
 		if(KeyManager.pressed[KeyEvent.VK_L]) {
 //			transform.rotate(0.05);
 			rigidBody.addRotForce(0.04);
+//			rigidBody.addPosForce(new Vector2(10, 0));
 		}
 		if(KeyManager.pressed[KeyEvent.VK_J]) {
 //			transform.rotate(-0.05);
 			rigidBody.addRotForce(-0.04);
+//			rigidBody.addPosForce(new Vector2(-10, 0));
 		}
+		if(KeyManager.pressed[KeyEvent.VK_SPACE]) {
+			rigidBody.resoluteToImpact(transform.getDimensions().divide(1f).rotate(Math.toRadians(-40)), Math.toRadians(90), 100f);
+		}
+		
 
 	}
 
