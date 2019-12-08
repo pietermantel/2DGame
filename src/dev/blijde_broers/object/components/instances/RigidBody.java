@@ -24,7 +24,7 @@ public class RigidBody extends ObjectComponent {
 	private CollisionComponent collisionComponent;
 
 	public static int timeStep = 50;
-	public static Vector2 gravitationalForce = new Vector2(0, .01f);
+	public static Vector2 gravitationalForce = new Vector2(0, .05f);
 
 	private Line renderImpulse;
 
@@ -102,7 +102,10 @@ public class RigidBody extends ObjectComponent {
 					transform.mid.increment(posVel);
 					transform.rotate(rotVel);
 					while (collisionComponent.intersects()) {
-						resoluteToCollision();
+						IntersectionReturn[] intersections = collisionComponent.intersection();
+						for(int j = 0; j < intersections.length; j++) {
+							resoluteToCollision(intersections[j]);
+						}
 						// break;
 						transform.mid.increment(posVel);
 						transform.rotate(rotVel);
@@ -131,8 +134,7 @@ public class RigidBody extends ObjectComponent {
 		}
 	}
 
-	private void resoluteToCollision() {
-		IntersectionReturn intersection = collisionComponent.intersection();
+	private void resoluteToCollision(IntersectionReturn intersection) {
 		Point p = intersection.point;
 		RigidBody otherRB = intersection.cc.getParent().getComponentManager().getRigidBody();
 		while (collisionComponent.intersects()) {

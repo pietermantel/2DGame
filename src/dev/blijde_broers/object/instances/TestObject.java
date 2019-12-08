@@ -23,7 +23,7 @@ public class TestObject extends GameObject {
 		super(transform, 0, GameObjectType.TestObject, GameState.Game);
 		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions().multiply(1.3f), 0))));
 		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\TestObject.jpg", new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.3f, 0.4f, 10f, true, true));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.3f, 0.4f, 100f, true, true));
 		rigidBody = componentManager.getRigidBody();
 	}
 

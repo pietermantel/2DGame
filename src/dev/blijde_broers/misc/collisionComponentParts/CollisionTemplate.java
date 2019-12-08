@@ -1,6 +1,13 @@
 package dev.blijde_broers.misc.collisionComponentParts;
 
-import dev.blijde_broers.misc.math.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import dev.blijde_broers.misc.math.Line;
+import dev.blijde_broers.misc.math.Math2D;
+import dev.blijde_broers.misc.math.Point;
+import dev.blijde_broers.misc.math.Transform;
+import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.components.instances.CollisionComponent;
 
 public abstract class CollisionTemplate {
@@ -44,22 +51,29 @@ public abstract class CollisionTemplate {
 		return false;
 	}
 	
-	public Point intersection(CollisionTemplate collisionTemplate) {
+	public Point[] intersection(CollisionTemplate collisionTemplate) {
 		if (finishedInit) {
 			if (Math2D.dist(getTransform().mid.asPoint(),
 					collisionTemplate.getTransform().mid.asPoint()) < (radius + collisionTemplate.radius)) {
 				checking = true;
+				ArrayList<Point> points = new ArrayList<Point> ();
 				for (Line thisL : ribs) {
 					for (Line otherL : collisionTemplate.ribs) {
 						if (otherL != null && thisL != null) {
 							Point intersection;
 							if ((intersection = thisL.intersection(otherL)) != null) {
-								return intersection;
+								points.add(intersection);
 							} 
 						}
 					}
 				}
-				return null;
+				if (points.size() > 0) {
+					Point[] returns = new Point[points.size()];
+					for (int i = 0; i < points.size(); i++) {
+						returns[i] = points.get(i);
+					}
+					return returns;
+				} else return null;
 			}
 		}
 		finishedInit = true;

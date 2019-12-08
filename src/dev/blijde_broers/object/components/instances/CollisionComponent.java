@@ -2,6 +2,7 @@ package dev.blijde_broers.object.components.instances;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import dev.blijde_broers.main.Game;
 import dev.blijde_broers.misc.collisionComponentParts.CollisionTemplate;
@@ -26,11 +27,10 @@ public class CollisionComponent extends ObjectComponent {
 
 	@Override
 	public void tick() {
-		Point intersection = null;
+		boolean intersects = false;
 		collisionTemplate.checking = false;
 		collisionTemplate.updateRibs();
 		for (GameObject o : Handler.objects) {
-			Point temp = null;
 			if (!o.equals(parent)) {
 				if (Math2D.dist(collisionTemplate.getTransform().mid.asPoint(),
 						o.getComponentManager().getCollisionComponent().collisionTemplate.getTransform().mid
@@ -38,16 +38,11 @@ public class CollisionComponent extends ObjectComponent {
 										+ o.getComponentManager().getCollisionComponent().collisionTemplate
 												.getRadius())) {
 					collisionTemplate.checking = true;
-					temp = o.getComponentManager().getCollisionComponent().collisionTemplate
-							.intersection(collisionTemplate);
+					intersects = collisionTemplate.intersects(o.getComponentManager().getCollisionComponent().collisionTemplate);
 				}
 			}
-			if (temp != null) {
-				intersection = temp;
-				break;
-			}
 		}
-		if (intersection != null) {
+		if (intersects) {
 			currentColor = Color.red;
 		} else {
 			if (collisionTemplate.checking) {
@@ -86,11 +81,12 @@ public class CollisionComponent extends ObjectComponent {
 		return false;
 	}
 	
-	public IntersectionReturn intersection() {
+	public IntersectionReturn[] intersection() {
 		collisionTemplate.checking = false;
 		collisionTemplate.updateRibs();
+		ArrayList<IntersectionReturn> intersections = new ArrayList<IntersectionReturn> ();
 		for (GameObject o : Handler.objects) {
-			Point temp = null;
+			Point[] temp = null;
 			if (!o.equals(parent)) {
 				if (Math2D.dist(collisionTemplate.getTransform().mid.asPoint(),
 						o.getComponentManager().getCollisionComponent().collisionTemplate.getTransform().mid
@@ -103,8 +99,17 @@ public class CollisionComponent extends ObjectComponent {
 				}
 			}
 			if (temp != null) {
-				return new IntersectionReturn(temp, o.getComponentManager().getCollisionComponent());
+				for(int i = 0; i < temp.length; i++) {
+					intersections.add(new IntersectionReturn(temp[i], o.getComponentManager().getCollisionComponent()));
+				}
 			}
+		}
+		if(intersections.size() > 0) {
+			IntersectionReturn[] returns = new IntersectionReturn[intersections.size()];
+			for(int i = 0; i < intersections.size(); i++) {
+				returns[i] = intersections.get(i);
+			}
+			return returns;
 		}
 		return null;
 	}

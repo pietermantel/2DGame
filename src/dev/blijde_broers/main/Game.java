@@ -36,7 +36,7 @@ public class Game implements Runnable {
 	public static GameState STATE = GameState.Menu;
 	public static Game GAME;
 
-	public static final int TPS = 60;
+	public static int TPS = 60;
 
 	public Game() {
 		start();
@@ -138,6 +138,7 @@ public class Game implements Runnable {
 		LinkedList<Long> renderTime = new LinkedList<Long>();
 		LinkedList<Long> tickTime = new LinkedList<Long>();
 		while (running) {
+			ns = 1000000000 / TPS;
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
