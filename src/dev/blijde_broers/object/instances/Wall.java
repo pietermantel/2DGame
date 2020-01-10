@@ -2,6 +2,7 @@ package dev.blijde_broers.object.instances;
 
 import java.awt.Graphics;
 
+import dev.blijde_broers.misc.Texture;
 import dev.blijde_broers.misc.collisionComponentParts.instances.Rectangle;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
@@ -17,8 +18,8 @@ public class Wall extends GameObject {
 	public Wall(Transform transform) {
 		super(transform, 0, GameObjectType.Wall, GameState.Game);
 		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions()))));
-		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\TestObject.jpg", new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 1f, 1f, Float.POSITIVE_INFINITY, false, false));
+		componentManager.addObjectComponent(new TextureComponent(this, Texture.dot, new Transform(new Vector2(), transform.getDimensions())));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 10f, 10f, Float.POSITIVE_INFINITY, false, false));
 	}
 
 	@Override

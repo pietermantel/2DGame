@@ -11,9 +11,9 @@ import dev.blijde_broers.input.MouseManager;
 import dev.blijde_broers.input.MouseWheelManager;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
-import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.GameState;
 import dev.blijde_broers.object.Handler;
+import dev.blijde_broers.object.components.simulations.instances.PhysicsSimulation;
 import dev.blijde_broers.object.instances.Player;
 import dev.blijde_broers.object.instances.TestObject;
 import dev.blijde_broers.object.instances.Wall;
@@ -69,6 +69,7 @@ public class Game implements Runnable {
 		loadingScreen.percentageDone = 33;
 
 		handler = new Handler();
+		Handler.simulations.add(new PhysicsSimulation());
 
 		loadingScreen.percentageDone = 67;
 
@@ -85,20 +86,24 @@ public class Game implements Runnable {
 
 	public void setup() {
 		handler.removeAll();
-		Handler.objects.add(new Player(new Transform(new Vector2(300, 300), new Vector2(220, 337))));
-		Handler.objects.add(new TestObject(new Transform(new Vector2(300, -500), new Vector2(100, 100))));
-//		for (int y = 0; y < 2; y++) {
-//			for (int x = 0; x < 2; x++) {
-//				GameObject temp = new TestObject(new Transform(new Vector2(x * 40, y * 40), new Vector2(30, 30)));
-//				// temp.getComponentManager().getRigidBody()
-//				// .addPosForce(new Vector2(1, 0).rotate(Math.random() * 2 * Math.PI));
-//				Handler.objects.add(temp);
-//			}
+//		Handler.objects.add(new Player(new Transform(new Vector2(300, 300), new Vector2(220, 336))));
+		Handler.objects.add(new TestObject(new Transform(new Vector2(300, -300), new Vector2(100, 100))));
+		// for (int y = 0; y < 2; y++) {
+		// for (int x = 0; x < 2; x++) {
+		// GameObject temp = new TestObject(new Transform(new Vector2(x * 40, y * 40),
+		// new Vector2(30, 30)));
+		// // temp.getComponentManager().getRigidBody()
+		// // .addPosForce(new Vector2(1, 0).rotate(Math.random() * 2 * Math.PI));
+		// Handler.objects.add(temp);
+		// }
+//		// }
+//		for (int r = 0; r < 360; r += 90) {
+//			Handler.objects.add(new Wall(new Transform(new Vector2(2000, 0).setDirection(Math.toRadians(r)),
+//					new Vector2(3900, 10).rotate(Math.toRadians(r + 90)))));
 //		}
-		for (int r = 0; r < 360; r += 90) {
-			Handler.objects.add(new Wall(new Transform(new Vector2(2000, 0).setDirection(Math.toRadians(r)),
-					new Vector2(3900, 10).rotate(Math.toRadians(r + 90)))));
-		}
+		Transform tr = new Transform(new Vector2(0, 1000), new Vector2(1000000f, 10));
+
+		Handler.objects.add(new Wall(tr));
 	}
 
 	public void tick() {

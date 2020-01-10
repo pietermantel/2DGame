@@ -35,22 +35,22 @@ public class MainCamera extends GameObject {
 		zoom = Math.pow((-0.1 * MouseWheelManager.mouseWheelRotation + 1), 2);
 		if(KeyManager.pressed[KeyEvent.VK_DOWN]) {
 //			transform.increment(new Vector2(0, -3));
-			rigidBody.addPosForce(new Vector2(0f, (float) (2 / zoom)));
+			rigidBody.addPosForce(new Vector2(0f, (float) (2f / zoom)));
 			followPlayer = false;
 		}
 		if(KeyManager.pressed[KeyEvent.VK_UP]) {
 //			transform.increment(new Vector2(0, 3));
-			rigidBody.addPosForce(new Vector2(0f, (float) -(2 / zoom)));
+			rigidBody.addPosForce(new Vector2(0f, (float) -(2f / zoom)));
 			followPlayer = false;
 		}
 		if(KeyManager.pressed[KeyEvent.VK_RIGHT]) {
 //			transform.increment(new Vector2(-3, 0));
-			rigidBody.addPosForce(new Vector2((float) (2 / zoom), 0f));
+			rigidBody.addPosForce(new Vector2((float) (2f / zoom), 0f));
 			followPlayer = false;
 		}
 		if(KeyManager.pressed[KeyEvent.VK_LEFT]) {
 //			transform.increment(new Vector2(3, 0));
-			rigidBody.addPosForce(new Vector2((float) -(2 / zoom), 0f));
+			rigidBody.addPosForce(new Vector2((float) -(2f / zoom), 0f));
 			followPlayer = false;
 		}
 		if(KeyManager.pressed[KeyEvent.VK_F1]) {

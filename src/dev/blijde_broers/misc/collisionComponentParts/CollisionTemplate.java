@@ -1,6 +1,5 @@
 package dev.blijde_broers.misc.collisionComponentParts;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import dev.blijde_broers.misc.math.Line;
@@ -15,7 +14,7 @@ public abstract class CollisionTemplate {
 	protected CollisionComponent parent;
 	protected Vector2[] corners;
 	private Line[] ribs;
-	private double radius;
+	private double radiusSquared, radius;
 	private boolean finishedInit = false;
 	public boolean checking = false;
 
@@ -25,22 +24,22 @@ public abstract class CollisionTemplate {
 		// updateRibs();
 		calcRadius();
 	}
-	
+
 	public CollisionTemplate() {
-		
+
 	}
 
-	public boolean intersects(CollisionTemplate collisionTemplate) {
+	public boolean intersects(CollisionTemplate cT) {
 		if (finishedInit) {
 			if (Math2D.dist(getTransform().mid.asPoint(),
-					collisionTemplate.getTransform().mid.asPoint()) < (radius + collisionTemplate.radius)) {
+					cT.getTransform().mid.asPoint()) < (radiusSquared + cT.radiusSquared)) {
 				checking = true;
 				for (Line thisL : ribs) {
-					for (Line otherL : collisionTemplate.ribs) {
+					for (Line otherL : cT.ribs) {
 						if (otherL != null && thisL != null) {
 							if (thisL.intersects(otherL)) {
 								return true;
-							} 
+							}
 						}
 					}
 				}
@@ -48,22 +47,54 @@ public abstract class CollisionTemplate {
 			}
 		}
 		finishedInit = true;
-		return false;
+		 return false;
+
+//		if (finishedInit) {
+//			if (Math2D.dist(getTransform().mid.asPoint(),
+//					cT.getTransform().mid.asPoint()) < (radius + cT.radius)) {
+//				checking = true;
+//				Line temp = new Line(getTransform().mid.asPoint(), cT.getTransform().mid.asPoint());
+//				double thisDist = 0;
+//				for (Line thisL : ribs) {
+//					Point intersection = temp.intersection(thisL);
+//					double tempDist;
+//					if(intersection != null)
+//						if ((tempDist = Math2D.dist(getTransform().mid.asPoint(), intersection)) > thisDist)
+//							thisDist = tempDist;
+//				}
+//				double otherDist = 0;
+//				for (Line otherL : cT.ribs) {
+//					Point intersection = null;
+//					if(otherL != null)
+//						intersection = temp.intersection(otherL);
+//					double tempDist;
+//					if(intersection != null)
+//						if ((tempDist = Math2D.dist(cT.getTransform().mid.asPoint(), intersection)) > otherDist)
+//							otherDist = tempDist;
+//				}
+//				if (thisDist + otherDist >= Math2D.dist(getTransform().mid.asPoint(),
+//						cT.getTransform().mid.asPoint()))
+//					return true;
+//				else return false;
+//			}
+//		}
+//		finishedInit = true;
+//		return false;
 	}
-	
+
 	public Point[] intersection(CollisionTemplate collisionTemplate) {
 		if (finishedInit) {
 			if (Math2D.dist(getTransform().mid.asPoint(),
-					collisionTemplate.getTransform().mid.asPoint()) < (radius + collisionTemplate.radius)) {
+					collisionTemplate.getTransform().mid.asPoint()) < (radiusSquared + collisionTemplate.radiusSquared)) {
 				checking = true;
-				ArrayList<Point> points = new ArrayList<Point> ();
+				ArrayList<Point> points = new ArrayList<Point>();
 				for (Line thisL : ribs) {
 					for (Line otherL : collisionTemplate.ribs) {
 						if (otherL != null && thisL != null) {
 							Point intersection;
 							if ((intersection = thisL.intersection(otherL)) != null) {
 								points.add(intersection);
-							} 
+							}
 						}
 					}
 				}
@@ -73,7 +104,8 @@ public abstract class CollisionTemplate {
 						returns[i] = points.get(i);
 					}
 					return returns;
-				} else return null;
+				} else
+					return null;
 			}
 		}
 		finishedInit = true;
@@ -98,15 +130,16 @@ public abstract class CollisionTemplate {
 							getTransform().mid.asPoint()));
 		}
 	}
-	
+
 	public void calcRadius() {
-		radius = 0;
+		radiusSquared = 0;
 		for (Vector2 c : corners) {
-			double tempRadius = Math2D.dist(new Point(), c.asPoint());
-			if (tempRadius > radius) {
-				radius = tempRadius;
+			double tempRadius = Math2D.distSqr(new Point(), c.asPoint());
+			if (tempRadius > radiusSquared) {
+				radiusSquared = tempRadius;
 			}
 		}
+		radius = Math.sqrt(radiusSquared);
 	}
 
 	// Updates all points to their relative position originating from the Transform
@@ -126,8 +159,8 @@ public abstract class CollisionTemplate {
 	}
 
 	public Transform getTransform() {
-		if(parent.getParent() != null)
-		return parent.getParent().getTransform();
+		if (parent.getParent() != null)
+			return parent.getParent().getTransform();
 		return new Transform();
 	}
 
@@ -154,6 +187,10 @@ public abstract class CollisionTemplate {
 
 	public void setRibs(Line[] ribs) {
 		this.ribs = ribs;
+	}
+
+	public double getRadiusSquared() {
+		return radiusSquared;
 	}
 	
 	public double getRadius() {

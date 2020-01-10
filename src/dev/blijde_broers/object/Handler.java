@@ -8,10 +8,13 @@ import dev.blijde_broers.camera.MainCamera;
 import dev.blijde_broers.main.Game;
 import dev.blijde_broers.menu.Menu;
 import dev.blijde_broers.misc.math.Transform;
+import dev.blijde_broers.object.components.simulations.SimulationHandler;
 
 public class Handler {
 
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	
+	public static ArrayList<SimulationHandler> simulations = new ArrayList<SimulationHandler>();
 
 	public static Menu menu = new Menu();
 
@@ -29,11 +32,17 @@ public class Handler {
 				objects.get(i).manageTick();
 			}
 		}
+		for (int i = 0; i < simulations.size(); i++) {
+			if (Arrays.asList(simulations.get(i).getStates()).contains(Game.STATE)) {
+				simulations.get(i).simulate();
+			}
+		}
 		if (Game.STATE == GameState.Menu) {
 			menu.tick();
 		}
 		if (Arrays.asList(MainCamera.STATES).contains(Game.STATE)) {
 			mainCamera.manageTick();
+			mainCamera.getComponentManager().getRigidBody().simulateTick(1);
 		}
 	}
 

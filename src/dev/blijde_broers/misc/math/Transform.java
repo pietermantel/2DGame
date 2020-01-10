@@ -15,7 +15,7 @@ public class Transform {
 	//The angle used to calculate the corners of thos object
 	private double rotation;
 	
-	private Texture dot = new Texture("res//textures/dot.png");
+	private Texture dot = Texture.dot;
 
 	public Transform(Vector2 mid, Vector2 dimensions, double rotation) {
 		this.mid = mid;

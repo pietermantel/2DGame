@@ -10,8 +10,9 @@ import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.components.ObjectComponent;
+import dev.blijde_broers.object.components.simulations.Simulatable;
 
-public class RigidBody extends ObjectComponent {
+public class RigidBody extends ObjectComponent implements Simulatable {
 
 	private Vector2 posVel;
 	public float rotVel = 0;
@@ -23,8 +24,7 @@ public class RigidBody extends ObjectComponent {
 	private Transform transform;
 	private CollisionComponent collisionComponent;
 
-	public static int timeStep = 50;
-	public static Vector2 gravitationalForce = new Vector2(0, .05f);
+	public static Vector2 gravitationalForce = new Vector2(0, .1f);
 
 	private Line renderImpulse;
 
@@ -72,51 +72,11 @@ public class RigidBody extends ObjectComponent {
 
 	@Override
 	public void tick() {
-		// if(Math.abs(posVel.x) < (0.001f / mass)) posVel.x = 0f;
-		// if(Math.abs(posVel.y) < (0.001f / mass)) posVel.y = 0f;
-		if (Float.isFinite(mass)) {
-			if (gravity) {
-				addPosForce(gravitationalForce.multiply(mass));
-			}
-			posVel.multiplyThis(1 - (posResistance / mass));
-			rotVel *= 1 - (rotResistance / mass);
-			Vector2 posVel = new Vector2(this.posVel);
-			float rotVel = this.rotVel;
-			if (xTied) {
-				posVel.x = 0;
-			}
-			if (yTied) {
-				posVel.y = 0;
-			}
-			if (rotTied) {
-				rotVel = 0;
-			}
-			if (doCollisionResolution) {
-				posVel.divideThis(timeStep);
-				rotVel /= timeStep;
-				for (int i = 0; i < timeStep; i++) {
-					if(Float.isNaN(posVel.x)) posVel.x = 0;
-					if(Float.isNaN(posVel.y)) posVel.y = 0;
-					if(Float.isNaN(transform.mid.x)) transform.mid.x = 0;
-					if(Float.isNaN(transform.mid.y)) transform.mid.y = 0;
-					transform.mid.increment(posVel);
-					transform.rotate(rotVel);
-					while (collisionComponent.intersects()) {
-						IntersectionReturn[] intersections = collisionComponent.intersection();
-						for(int j = 0; j < intersections.length; j++) {
-							resoluteToCollision(intersections[j]);
-						}
-						// break;
-						transform.mid.increment(posVel);
-						transform.rotate(rotVel);
-					}
-				}
-			} else {
-				transform.mid.increment(posVel);
-				transform.rotate(rotVel);
-			}
+		if (gravity) {
+			addPosForce(gravitationalForce.multiply(mass));
 		}
-
+		posVel.multiplyThis(1 - (posResistance / mass));
+		rotVel *= 1 - (rotResistance / mass);
 	}
 
 	@Override
@@ -134,18 +94,71 @@ public class RigidBody extends ObjectComponent {
 		}
 	}
 
-	private void resoluteToCollision(IntersectionReturn intersection) {
-		Point p = intersection.point;
-		RigidBody otherRB = intersection.cc.getParent().getComponentManager().getRigidBody();
-		while (collisionComponent.intersects()) {
-			for (int i = 0; i < 1; i++) {
-				transform.mid.increment(posVel.min());
-				transform.rotate(-rotVel);
+	@Override
+	public void simulateTick(int simsPerTick) {
+		// if (Float.isFinite(mass)) {
+		Vector2 posVel = new Vector2(this.posVel);
+		float rotVel = this.rotVel;
+		if (xTied) {
+			posVel.x = 0;
+		}
+		if (yTied) {
+			posVel.y = 0;
+		}
+		if (rotTied) {
+			rotVel = 0;
+		}
+		posVel.divideThis(simsPerTick);
+		rotVel /= simsPerTick;
+		if (doCollisionResolution) {
+			if (Float.isNaN(posVel.x))
+				posVel.x = 0;
+			if (Float.isNaN(posVel.y))
+				posVel.y = 0;
+			if (Float.isNaN(transform.mid.x))
+				transform.mid.x = 0;
+			if (Float.isNaN(transform.mid.y))
+				transform.mid.y = 0;
+			transform.mid.increment(posVel);
+			transform.rotate(rotVel);
+			while (collisionComponent.intersects()) {
+				IntersectionReturn[] intersections = collisionComponent.intersection();
+				for (int j = 0; j < intersections.length; j++) {
+					for (int k = 0; k < intersections[j].points.length; k++) {
+						resoluteToCollision(intersections[j].cc, intersections[j].points[k], simsPerTick);
+					}
+				}
+				transform.mid.increment(posVel);
+				transform.rotate(rotVel);
 			}
+		} else {
+			transform.mid.increment(posVel);
+			transform.rotate(rotVel);
+		}
+	}
+
+	private void resoluteToCollision(CollisionComponent cc, Point p, int simsPerTick) {
+		RigidBody otherRB = cc.getParent().getComponentManager().getRigidBody();
+		int test = 0;
+		while (collisionComponent.intersects()) {
+			transform.mid.increment(posVel.min().divide(0.1f * simsPerTick));
+			transform.rotate(-rotVel / (10));
+			test++;
+			// if (test > 10)
+			// throw new Error("loop");
 		}
 		Vector2 pAsVector2 = p.asVector2();
-		Vector2 vThis = pAsVector2.plus(transform.mid.min());
-		Vector2 vOther = pAsVector2.plus(otherRB.transform.mid.min());
+		Vector2 vThis = pAsVector2.minus(transform.mid);
+		Vector2 vOther = pAsVector2.minus(otherRB.transform.mid);
+		if (vThis.getDist() >= collisionComponent.getCollisionTemplate().getRadius()) {
+			double rot = vThis.getDirection();
+			vThis = new Vector2(0f, (float) collisionComponent.getCollisionTemplate().getRadius()).setDirection(rot);
+		}
+		if (vOther.getDist() >= otherRB.collisionComponent.getCollisionTemplate().getRadius()) {
+			double rot = vOther.getDirection();
+			vOther = new Vector2(0f, (float) otherRB.collisionComponent.getCollisionTemplate().getRadius())
+					.setDirection(rot);
+		}
 		double rotVThisDir = vThis.getDirection() + (Math.toRadians(90) * (rotVel / Math.abs(rotVel)));
 		double rotVOtherDir = vOther.getDirection()
 				+ (Math.toRadians(90) * (otherRB.rotVel / Math.abs(otherRB.rotVel)));
@@ -159,46 +172,42 @@ public class RigidBody extends ObjectComponent {
 		Vector2 otherImpulse = new Vector2(otherRB.posVel, posVel).plus(new Vector2(otherRotV, thisRotV));
 		double thisImpulseDir = thisImpulse.getDirection();
 		double otherImpulseDir = otherImpulse.getDirection();
-		double thisImpulseEnergy = (1d / 2d) * mass * Math.pow(thisImpulse.getDist(), 2);
-		// + calcRotE(mass, rotVel);
-		double otherImpulseEnergy = (1d / 2d) * otherRB.mass * Math.pow(otherImpulse.getDist(), 2);
-		// + calcRotE(otherRB.mass, otherRB.rotVel);
-		// System.out.println();
-		// System.out.println(otherImpulse);
+		double thisImpulseEnergy = (1d / 2d) * mass * Math.pow(thisImpulse.getDist() / 10, 2);
+		double otherImpulseEnergy = (1d / 2d) * otherRB.mass * Math.pow(otherImpulse.getDist() / 10, 2);
 		if (Float.isInfinite(otherRB.mass)) {
 			otherImpulseEnergy = thisImpulseEnergy;
 		}
-		resoluteToImpact(vThis, thisImpulseDir, thisImpulseEnergy);
-		// if (otherRB.doCollisionResolution)
-		otherRB.resoluteToImpact(vOther, otherImpulseDir, otherImpulseEnergy);
-//		System.out.println();
-//		System.out.println(pAsVector2);
-//		System.out.println(posVel);
-//		System.out.println(transform.mid);
-//		System.out.println(parent.toString());
-//		System.out.println(vThis);
-//		System.out.println(thisImpulseDir);
-//		System.out.println(thisImpulse);
-//		System.out.println();
-//		System.out.println(otherRB.parent.toString());
-//		System.out.println(vOther);
-//		System.out.println(otherImpulseDir);
-//		System.out.println(otherImpulse);
-		renderImpulse = new Line(p.asVector2().plus(thisImpulse.multiply(10f)), p.asVector2());
-		otherRB.renderImpulse = new Line(pAsVector2.plus(otherImpulse.multiply(10f)), p.asVector2());
-	}
-
-	private double calcRotE(double mass, double rotVel) {
-		// double r = collisionComponent.getCollisionTemplate().getRadius();
-		return (1d / 2d) * mass * Math.pow(rotVel, 2);
+		double totalImpulseEnergy = thisImpulseEnergy + otherImpulseEnergy;
+		if (Float.isFinite(otherRB.mass)) {
+			resoluteToImpulse(vThis, thisImpulseDir, totalImpulseEnergy / 2);
+			otherRB.resoluteToImpulse(vOther, otherImpulseDir, totalImpulseEnergy / 2);
+		} else {
+			resoluteToImpulse(vThis, thisImpulseDir, totalImpulseEnergy);
+		}
+		System.out.println();
+		// System.out.println(pAsVector2);
+		// System.out.println(posVel);
+		// System.out.println(transform.mid);
+		// System.out.println(parent.toString());
+		// System.out.println(thisImpulseEnergy);
+		System.out.println(vThis);
+		// System.out.println(thisImpulseDir);
+		// System.out.println(thisImpulse);
+		// System.out.println();
+		// System.out.println(otherRB.parent.toString());
+		// System.out.println(vOther);
+		// System.out.println(otherImpulseDir);
+		// System.out.println(otherImpulse);
+		renderImpulse = new Line(p.asVector2().plus(thisImpulse.multiply(1f)), p.asVector2());
+		otherRB.renderImpulse = new Line(pAsVector2.plus(otherImpulse.multiply(1f)), p.asVector2());
 	}
 
 	private double ErToVr(double E) {
 		double r = collisionComponent.getCollisionTemplate().getRadius();
 		// double r = 10;
-		double omega = Math.sqrt((4 * E) / ((mass / 10) * Math.pow(r, 2)));
-		double rotVel = (1 / Math.PI) * Math.sqrt(E / ((mass / 10) * Math.pow(r, 2)));
-		return rotVel * omega;
+		double inertia = (0.25d) * mass * Math.pow(r, 2);
+		double omega = Math.sqrt(E / (inertia / 2));
+		return omega;
 	}
 
 	private double getEtoR(Vector2 impulseFrom, double direction) {
@@ -206,12 +215,11 @@ public class RigidBody extends ObjectComponent {
 		Vector2 tempImpulseFrom = new Vector2(impulseFrom);
 		tempImpulseFrom.rotate(-direction);
 		double EtoR = tempImpulseFrom.y / (maxHeight * 2);
-		// System.out.println(EtoR);
 		// System.out.println(tempImpulseFrom.y);
 		return EtoR;
 	}
 
-	public void resoluteToImpact(Vector2 impulseFrom, double impulseDirection, double impulseEnergy) {
+	public void resoluteToImpulse(Vector2 impulseFrom, double impulseDirection, double impulseEnergy) {
 		double EtoR = getEtoR(impulseFrom, impulseDirection);
 		double EtoP = (1 - Math.abs(EtoR));
 		double rotVel = 0;
@@ -220,20 +228,22 @@ public class RigidBody extends ObjectComponent {
 		}
 
 		this.rotVel += rotVel;
-//		System.out.println(parent.toString());
-//		System.out.println();
-//		System.out.println(impulseFrom);
-//		System.out.println(impulseDirection);
-//		System.out.println(impulseEnergy);
-//		System.out.println(EtoR);
-//		System.out.println(EtoP);
-//		System.out.println(rotVel);
-//		System.out.println(posVel);
+		// if (impulseDirection == Math.toRadians(90)) {
+		// System.out.println();
+		// System.out.println(parent.toString());
+		// System.out.println(impulseFrom);
+		// System.out.println(impulseDirection);
+		// System.out.println(impulseEnergy);
+		// System.out.println(EtoR);
+		// System.out.println(EtoP);
+		// System.out.println(rotVel);
+		// System.out.println(posVel);
+		// }
 		addPosForce(impulseDirection, EtoP * impulseEnergy);
 	}
 
 	public void addPosForce(double direction, double energy) {
-		double v = Math.sqrt((energy * 2)) / mass;
+		double v = Math.sqrt(energy / (mass / 2));
 		Vector2 posVel = new Vector2((float) v, 0f).setDirection(direction);
 		this.posVel.increment(posVel);
 	}
@@ -241,7 +251,7 @@ public class RigidBody extends ObjectComponent {
 	public void addPosForce(Vector2 force) {
 		double energy = force.getDist();
 		double direction = force.getDirection();
-		double v = Math.sqrt(energy * 2 / mass);
+		double v = Math.sqrt(energy / (mass / 2));
 		Vector2 posVel = new Vector2((float) v, 0f).setDirection(direction);
 		this.posVel.increment(posVel);
 	}

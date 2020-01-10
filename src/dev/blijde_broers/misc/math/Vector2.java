@@ -114,7 +114,7 @@ public class Vector2 {
 	}
 
 	public Vector2 divide(float a) {
-		return new Vector2(x /= a, y /= a);
+		return new Vector2(x / a, y / a);
 	}
 
 }

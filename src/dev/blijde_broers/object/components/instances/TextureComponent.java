@@ -74,8 +74,7 @@ public class TextureComponent extends ObjectComponent {
 
 		// Translates to the offset's position
 		// absPos.increment(offset.mid.x, offset.mid.y);
-		g2D.translate((int) (offset.mid.x * Handler.mainCamera.zoom),
-				(int) (offset.mid.y * Handler.mainCamera.zoom));
+		g2D.translate((int) (offset.mid.x * Handler.mainCamera.zoom), (int) (offset.mid.y * Handler.mainCamera.zoom));
 
 		// Rotates the graphics to the offset's rotation
 		g2D.rotate(offset.getRotation());
@@ -99,14 +98,13 @@ public class TextureComponent extends ObjectComponent {
 		AffineTransform old = g2D.getTransform();
 		CollisionTemplate ct = cc.getCollisionTemplate();
 		g2D.translate((int) (Game.GAME.getWindow().getWidth() / 2), (int) (Game.GAME.getWindow().getHeight() / 2));
-		g2D.translate((int) (-Handler.mainCamera.getTransform().mid.x * Handler.mainCamera.zoom), (int) (-Handler.mainCamera.getTransform().mid.y * Handler.mainCamera.zoom));
+		g2D.translate((int) (-Handler.mainCamera.getTransform().mid.x * Handler.mainCamera.zoom),
+				(int) (-Handler.mainCamera.getTransform().mid.y * Handler.mainCamera.zoom));
 		for (int i = 0; i < ct.getRibs().length; i++) {
 			Line rib = ct.getRibs()[i];
 			if (rib != null) {
-				g2D.drawLine((int) (Handler.mainCamera.zoom * rib.v1.x),
-						(int) (Handler.mainCamera.zoom * rib.v1.y),
-						(int) (Handler.mainCamera.zoom * rib.v2.x),
-						(int) (Handler.mainCamera.zoom * rib.v2.y));
+				g2D.drawLine((int) (Handler.mainCamera.zoom * rib.v1.x), (int) (Handler.mainCamera.zoom * rib.v1.y),
+						(int) (Handler.mainCamera.zoom * rib.v2.x), (int) (Handler.mainCamera.zoom * rib.v2.y));
 			}
 		}
 		g2D.setColor(Color.white);

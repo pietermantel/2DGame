@@ -81,6 +81,11 @@ public class CollisionComponent extends ObjectComponent {
 		return false;
 	}
 	
+	public boolean intersects(CollisionComponent cc) {
+		collisionTemplate.updateRibs();
+		return collisionTemplate.intersects(cc.getCollisionTemplate());
+	}
+	
 	public IntersectionReturn[] intersection() {
 		collisionTemplate.checking = false;
 		collisionTemplate.updateRibs();
@@ -90,18 +95,16 @@ public class CollisionComponent extends ObjectComponent {
 			if (!o.equals(parent)) {
 				if (Math2D.dist(collisionTemplate.getTransform().mid.asPoint(),
 						o.getComponentManager().getCollisionComponent().collisionTemplate.getTransform().mid
-								.asPoint()) < (collisionTemplate.getRadius()
+								.asPoint()) < (collisionTemplate.getRadiusSquared()
 										+ o.getComponentManager().getCollisionComponent().collisionTemplate
-												.getRadius())) {
+												.getRadiusSquared())) {
 					collisionTemplate.checking = true;
 					temp = o.getComponentManager().getCollisionComponent().collisionTemplate
 							.intersection(collisionTemplate);
 				}
 			}
 			if (temp != null) {
-				for(int i = 0; i < temp.length; i++) {
-					intersections.add(new IntersectionReturn(temp[i], o.getComponentManager().getCollisionComponent()));
-				}
+				intersections.add(new IntersectionReturn(temp, o.getComponentManager().getCollisionComponent()));
 			}
 		}
 		if(intersections.size() > 0) {

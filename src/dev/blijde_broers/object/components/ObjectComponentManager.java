@@ -26,8 +26,8 @@ public class ObjectComponentManager {
 	}
 
 	public void render(Graphics g) {
-		for (ObjectComponent objectComponent : objectComponents) {
-			objectComponent.render(g);
+		for (int i = 0; i < objectComponents.size(); i++) {
+			objectComponents.get(i).render(g);
 		}
 	}
 
