@@ -2,9 +2,9 @@ package dev.blijde_broers.misc.math;
 
 public class Vector2 {
 	
-	public float x = 0, y = 0;
+	public double x = 0, y = 0;
 
-	public Vector2(float x, float y) {
+	public Vector2(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -49,8 +49,8 @@ public class Vector2 {
 		double r = Math2D.dist(new Point(), this.asPoint());
 		double a = Math.atan2(y, x);
 		double a1 = a + theta;
-		x = (float) (r * Math.cos(a1));
-		y = (float) (r * Math.sin(a1));
+		x = (double) (r * Math.cos(a1));
+		y = (double) (r * Math.sin(a1));
 		return new Vector2(x, y);
 	}
 	
@@ -58,27 +58,27 @@ public class Vector2 {
 		double r = Math2D.dist(p, this.asPoint());
 		double a = Math.atan2((y - p.y), (x - p.x));
 		double b = a + theta;
-		x = (float) (r * Math.cos(b) + p.x);
-		y = (float) (r * Math.sin(b) + p.y);
+		x = (double) (r * Math.cos(b) + p.x);
+		y = (double) (r * Math.sin(b) + p.y);
 		return new Vector2(x, y);
 	}
 	
 	public Vector2 setDirection(double direction) {
 		double r = Math2D.dist(new Point(), this.asPoint());
-		x = (float) (r * Math.cos(direction));
-		y = (float) (r * Math.sin(direction));
+		x = (double) (r * Math.cos(direction));
+		y = (double) (r * Math.sin(direction));
 		return new Vector2(x, y);
 	}
 	
 	public Vector2 setDirection(double direction, Point p) {
 		double r = Math2D.dist(p, this.asPoint());
-		x = (float) (r * Math.cos(direction) + p.x);
-		y = (float) (r * Math.sin(direction) + p.y);
+		x = (double) (r * Math.cos(direction) + p.x);
+		y = (double) (r * Math.sin(direction) + p.y);
 		return new Vector2(x, y);
 	}
 	
-	public float getDist() {
-		return (float) Math.sqrt((x * x + y * y));
+	public double getDist() {
+		return (double) Math.sqrt((x * x + y * y));
 	}
 	
 	public double getDirection() {
@@ -90,7 +90,7 @@ public class Vector2 {
 		y += v.y;
 	}
 	
-	public void increment(float x, float y) {
+	public void increment(double x, double y) {
 		this.x += x;
 		this.y += y;
 	}
@@ -99,22 +99,28 @@ public class Vector2 {
 		return new Vector2(-x, -y);
 	}
 	
-	public void multiplyThis(float a) {
+	public void multiplyThis(double a) {
 		x *= a;
 		y *= a;
 	}
 	
-	public Vector2 multiply(float a) {
+	public Vector2 multiply(double a) {
 		return new Vector2(x * a, y * a);
 	}
 	
-	public void divideThis(float a) {
+	public void divideThis(double a) {
 		x /= a;
 		y /= a;
 	}
 
-	public Vector2 divide(float a) {
+	public Vector2 divide(double a) {
 		return new Vector2(x / a, y / a);
+	}
+	
+	public boolean isNaN() {
+		if(Double.isNaN(x)) return true;
+		if(Double.isNaN(y)) return true;
+		return false;
 	}
 
 }

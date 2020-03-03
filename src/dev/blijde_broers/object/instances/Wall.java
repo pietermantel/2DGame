@@ -19,12 +19,12 @@ public class Wall extends GameObject {
 		super(transform, 0, GameObjectType.Wall, GameState.Game);
 		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions()))));
 		componentManager.addObjectComponent(new TextureComponent(this, Texture.dot, new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 10f, 10f, Float.POSITIVE_INFINITY, false, false));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 1000, 1000, Double.POSITIVE_INFINITY, false, false));
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
+//		System.out.println(transform.mid);
 
 	}
 

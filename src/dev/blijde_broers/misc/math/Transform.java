@@ -107,12 +107,12 @@ public class Transform {
 		return rotation;
 	}
 	
-	public void moveOnRelativeXAxis(float distance) {
+	public void moveOnRelativeXAxis(double distance) {
 		mid.x += Math.cos(rotation) * distance;
 		mid.y += Math.sin(rotation) * distance;
 	}
 	
-	public void moveOnRelativeYAxis(float distance) {
+	public void moveOnRelativeYAxis(double distance) {
 		mid.x += Math.cos(rotation + 0.5 * Math.PI) * distance;
 		mid.y += Math.sin(rotation + 0.5 * Math.PI) * distance;
 	}

@@ -6,7 +6,7 @@ public class Line {
 
 	public Vector2 v1, v2;
 
-	public Line(float x1, float y1, float x2, float y2) {
+	public Line(double x1, double y1, double x2, double y2) {
 		v1 = new Vector2(x1, y1);
 		v2 = new Vector2(x2, y2);
 	}

@@ -15,7 +15,7 @@ public class Math2D {
 	}
 	
 	public static Point randomPoint() {
-		return new Point((float) Math.random(), (float) Math.random());
+		return new Point(Math.random(), Math.random());
 	}
 
 }

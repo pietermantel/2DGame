@@ -10,30 +10,28 @@ import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.GameObjectType;
 import dev.blijde_broers.object.GameState;
-import dev.blijde_broers.object.Handler;
 import dev.blijde_broers.object.components.instances.CollisionComponent;
 import dev.blijde_broers.object.components.instances.RigidBody;
 import dev.blijde_broers.object.components.instances.TextureComponent;
-import dev.blijde_broers.object.components.instances.joints.SpringJoint;
 
 public class TestObject extends GameObject {
 
 	private RigidBody rigidBody;
-	
+
 	private boolean temp = true;
 
 	public TestObject(Transform transform) {
 		super(transform, 0, GameObjectType.TestObject, GameState.Game);
-		componentManager.addObjectComponent(new CollisionComponent(this, new MultiCorner(
-				new Transform(new Vector2(), transform.getDimensions().multiply(2f), Math.toRadians(45)), 6)));
-		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\TestObject.jpg",
+		componentManager.addObjectComponent(new CollisionComponent(this,
+				new MultiCorner(new Transform(new Vector2(), transform.getDimensions().multiply(1)), 10)));
+		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\Brammm.jpg",
 				new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.3f, 0.3f, 10f, true, true));
-//		GameObject temp = Handler.objects.get(0);
-//		componentManager.addObjectComponent(new SpringJoint(this,
-//				new Vector2(),
-//				temp.getComponentManager().getRigidBody(),
-//				new Vector2(), 600, 1E+1f));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.0001, 0.0001, 1, true, true));
+		// GameObject temp = Handler.objects.get(0);
+		// componentManager.addObjectComponent(new SpringJoint(this,
+		// new Vector2(),
+		// temp.getComponentManager().getRigidBody(),
+		// new Vector2(), 600, 1E-1));
 		rigidBody = componentManager.getRigidBody();
 	}
 
@@ -51,17 +49,18 @@ public class TestObject extends GameObject {
 		}
 		if (KeyManager.pressed[KeyEvent.VK_L]) {
 			// transform.rotate(0.05);
-			rigidBody.addRotForce(0.4);
+			rigidBody.addRotForce(.04);
 			// rigidBody.addPosForce(new Vector2(10, 0));
 		}
 		if (KeyManager.pressed[KeyEvent.VK_J]) {
 			// transform.rotate(-0.05);
-			rigidBody.addRotForce(-0.4);
+			rigidBody.addRotForce(-.04);
 			// rigidBody.addPosForce(new Vector2(-10, 0));
 		}
 		if (KeyManager.pressed[KeyEvent.VK_SPACE] && temp) {
-			componentManager.getObjectComponents().remove(componentManager.getObjectComponents().size() - 1);
-			temp = false;
+			// componentManager.getObjectComponents().remove(componentManager.getObjectComponents().size()
+			// - 1);
+			// temp = false;
 		}
 
 	}

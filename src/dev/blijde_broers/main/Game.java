@@ -11,6 +11,7 @@ import dev.blijde_broers.input.MouseManager;
 import dev.blijde_broers.input.MouseWheelManager;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
+import dev.blijde_broers.object.GameObject;
 import dev.blijde_broers.object.GameState;
 import dev.blijde_broers.object.Handler;
 import dev.blijde_broers.object.components.simulations.instances.PhysicsSimulation;
@@ -86,29 +87,31 @@ public class Game implements Runnable {
 
 	public void setup() {
 		handler.removeAll();
-//		Handler.objects.add(new Player(new Transform(new Vector2(300, 300), new Vector2(220, 336))));
+		Handler.objects.add(new Player(new Transform(new Vector2(300, 300), new Vector2(220, 336))));
 		Handler.objects.add(new TestObject(new Transform(new Vector2(300, -300), new Vector2(100, 100))));
-		// for (int y = 0; y < 2; y++) {
-		// for (int x = 0; x < 2; x++) {
-		// GameObject temp = new TestObject(new Transform(new Vector2(x * 40, y * 40),
-		// new Vector2(30, 30)));
-		// // temp.getComponentManager().getRigidBody()
-		// // .addPosForce(new Vector2(1, 0).rotate(Math.random() * 2 * Math.PI));
-		// Handler.objects.add(temp);
-		// }
-//		// }
+//		for (int y = 0; y < 5; y++) {
+//			for (int x = 0; x < 5; x++) {
+//				GameObject temp = new TestObject(new Transform(new Vector2(x * 40 - 300, y * 40 - 300), new Vector2(30, 30)));
+////				 temp.getComponentManager().getRigidBody()
+////				 .addPosForce(new Vector2(1, 0).rotate(Math.random() * 2 * Math.PI));
+//				Handler.objects.add(temp);
+//			}
+//		}
 //		for (int r = 0; r < 360; r += 90) {
 //			Handler.objects.add(new Wall(new Transform(new Vector2(2000, 0).setDirection(Math.toRadians(r)),
 //					new Vector2(3900, 10).rotate(Math.toRadians(r + 90)))));
 //		}
-		Transform tr = new Transform(new Vector2(0, 1000), new Vector2(1000000f, 10));
-
+		Transform tr = new Transform(new Vector2(0, 1000), new Vector2(100000f, 10), Math.toRadians(0));
+		Handler.objects.add(new Wall(tr));
+		tr = new Transform(new Vector2(100, 1000), new Vector2(100000f, 10), Math.toRadians(90));
 		Handler.objects.add(new Wall(tr));
 	}
 
 	public void tick() {
 		handler.tick();
 		toggleStates();
+		if(KeyManager.pressed[KeyEvent.VK_0]) TPS++;
+		if(KeyManager.pressed[KeyEvent.VK_9]) TPS--;
 	}
 
 	public void render() {
@@ -126,8 +129,11 @@ public class Game implements Runnable {
 		handler.render(g);
 
 		g.setColor(Color.white);
-		g.drawString(Double.toString(Handler.mainCamera.zoom), 10, 20);
-
+		if (debug) {
+			g.drawString(Double.toString(Handler.mainCamera.zoom), 10, 20);
+			g.drawString(Integer.toString(TPS), 10, 40);
+			g.drawString(Integer.toString(Handler.objects.size()), 10, 60);
+		}
 		g.dispose();
 		bs.show();
 	}

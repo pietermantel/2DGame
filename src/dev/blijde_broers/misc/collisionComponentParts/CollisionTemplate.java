@@ -13,15 +13,16 @@ public abstract class CollisionTemplate {
 
 	protected CollisionComponent parent;
 	protected Vector2[] corners;
-	private Line[] ribs;
+	private Line[] border;
+	private Line[] diagonals;
 	private double radiusSquared, radius;
 	private boolean finishedInit = false;
 	public boolean checking = false;
 
 	public CollisionTemplate(Vector2[] corners) {
 		this.corners = corners;
-		ribs = new Line[corners.length];
-		// updateRibs();
+		border = new Line[corners.length];
+		diagonals = new Line[corners.length];
 		calcRadius();
 	}
 
@@ -34,8 +35,8 @@ public abstract class CollisionTemplate {
 			if (Math2D.dist(getTransform().mid.asPoint(),
 					cT.getTransform().mid.asPoint()) < (radiusSquared + cT.radiusSquared)) {
 				checking = true;
-				for (Line thisL : ribs) {
-					for (Line otherL : cT.ribs) {
+				for (Line thisL : border) {
+					for (Line otherL : cT.border) {
 						if (otherL != null && thisL != null) {
 							if (thisL.intersects(otherL)) {
 								return true;
@@ -47,65 +48,72 @@ public abstract class CollisionTemplate {
 			}
 		}
 		finishedInit = true;
-		 return false;
+		return false;
 
-//		if (finishedInit) {
-//			if (Math2D.dist(getTransform().mid.asPoint(),
-//					cT.getTransform().mid.asPoint()) < (radius + cT.radius)) {
-//				checking = true;
-//				Line temp = new Line(getTransform().mid.asPoint(), cT.getTransform().mid.asPoint());
-//				double thisDist = 0;
-//				for (Line thisL : ribs) {
-//					Point intersection = temp.intersection(thisL);
-//					double tempDist;
-//					if(intersection != null)
-//						if ((tempDist = Math2D.dist(getTransform().mid.asPoint(), intersection)) > thisDist)
-//							thisDist = tempDist;
-//				}
-//				double otherDist = 0;
-//				for (Line otherL : cT.ribs) {
-//					Point intersection = null;
-//					if(otherL != null)
-//						intersection = temp.intersection(otherL);
-//					double tempDist;
-//					if(intersection != null)
-//						if ((tempDist = Math2D.dist(cT.getTransform().mid.asPoint(), intersection)) > otherDist)
-//							otherDist = tempDist;
-//				}
-//				if (thisDist + otherDist >= Math2D.dist(getTransform().mid.asPoint(),
-//						cT.getTransform().mid.asPoint()))
-//					return true;
-//				else return false;
-//			}
-//		}
-//		finishedInit = true;
-//		return false;
 	}
 
-	public Point[] intersection(CollisionTemplate collisionTemplate) {
+	public IntersectionReturn intersection(CollisionTemplate cT) {
 		if (finishedInit) {
 			if (Math2D.dist(getTransform().mid.asPoint(),
-					collisionTemplate.getTransform().mid.asPoint()) < (radiusSquared + collisionTemplate.radiusSquared)) {
+					cT.getTransform().mid.asPoint()) < (radius + cT.radius)) {
 				checking = true;
 				ArrayList<Point> points = new ArrayList<Point>();
-				for (Line thisL : ribs) {
-					for (Line otherL : collisionTemplate.ribs) {
+				ArrayList<Line> otherIntersectedLines = new ArrayList<Line>();
+				ArrayList<Line> thisIntersectedLines = new ArrayList<Line>();
+				// Calculate intersection
+				for (Line thisL : border) {
+					for (Line otherL : cT.border) {
 						if (otherL != null && thisL != null) {
 							Point intersection;
 							if ((intersection = thisL.intersection(otherL)) != null) {
 								points.add(intersection);
+								otherIntersectedLines.add(otherL);
+								thisIntersectedLines.add(thisL);
+							}
+							if(points.size() >= 2) {
+								break;
+							}
+						}
+					}
+					if(points.size() >= 2) {
+						break;
+					}
+				}
+				
+				if(points.size() < 1) return null;
+				
+				
+				Vector2 wayOut = new Vector2(0, 0);
+				int divisor = 0;
+				for (Line otherBorder : otherIntersectedLines) {
+					for (Line thisDiagonal : diagonals) {
+						if (otherBorder != null && thisDiagonal != null) {
+							Point intersection;
+							if ((intersection = thisDiagonal.intersection(otherBorder)) != null) {
+								wayOut.increment(new Vector2(intersection.asVector2(), thisDiagonal.v2));
+								divisor++;
 							}
 						}
 					}
 				}
-				if (points.size() > 0) {
-					Point[] returns = new Point[points.size()];
-					for (int i = 0; i < points.size(); i++) {
-						returns[i] = points.get(i);
+				
+				for (Line thisBorder : thisIntersectedLines) {
+					for (Line otherDiagonal : cT.diagonals) {
+						if (thisBorder != null && otherDiagonal != null) {
+							Point intersection;
+							if ((intersection = otherDiagonal.intersection(thisBorder)) != null) {
+								wayOut.increment(new Vector2(otherDiagonal.v2, intersection.asVector2()));
+								divisor++;
+							}
+						}
 					}
-					return returns;
-				} else
-					return null;
+				}
+				wayOut.divideThis(divisor);
+				IntersectionReturn out;
+				Point[] pointsOut = new Point[points.size()];
+				points.toArray(pointsOut);
+				out = new IntersectionReturn(null, pointsOut, wayOut);
+				return out;
 			}
 		}
 		finishedInit = true;
@@ -114,20 +122,29 @@ public abstract class CollisionTemplate {
 
 	// Updates all lines to their absolute coordinates. This is done by adding the
 	// Transform absolute coordinates to all corners.
-	public void updateRibs() {
+	public void updateTemplate() {
 		if (corners.length > 0) {
 			for (int i = 0; i < corners.length - 1; i++) {
-				ribs[i] = new Line(
+				// Initialize ribs for each corner
+				border[i] = new Line(
 						corners[i].plus(getTransform().mid).rotate(getTransform().getRotation(),
 								getTransform().mid.asPoint()),
 						corners[i + 1].plus(getTransform().mid).rotate(getTransform().getRotation(),
 								getTransform().mid.asPoint()));
+
+				// Initialize diagonals for each corner
+				diagonals[i] = new Line(
+						getTransform().mid,
+						corners[i].plus(getTransform().mid)
+						.rotate(getTransform().getRotation(), getTransform().mid.asPoint()));
 			}
-			ribs[corners.length - 1] = new Line(
+			border[corners.length - 1] = new Line(
 					corners[corners.length - 1].plus(getTransform().mid).rotate(getTransform().getRotation(),
 							getTransform().mid.asPoint()),
 					corners[0].plus(getTransform().mid).rotate(getTransform().getRotation(),
 							getTransform().mid.asPoint()));
+			diagonals[corners.length - 1] = new Line(getTransform().mid, corners[corners.length - 1].plus(getTransform().mid)
+					.rotate(getTransform().getRotation(), getTransform().mid.asPoint()));
 		}
 	}
 
@@ -182,17 +199,25 @@ public abstract class CollisionTemplate {
 	}
 
 	public Line[] getRibs() {
-		return ribs;
+		return border;
 	}
 
 	public void setRibs(Line[] ribs) {
-		this.ribs = ribs;
+		this.border = ribs;
+	}
+
+	public Line[] getDiagonals() {
+		return diagonals;
+	}
+
+	public void setDiagonals(Line[] diagonals) {
+		this.diagonals = diagonals;
 	}
 
 	public double getRadiusSquared() {
 		return radiusSquared;
 	}
-	
+
 	public double getRadius() {
 		return radius;
 	}

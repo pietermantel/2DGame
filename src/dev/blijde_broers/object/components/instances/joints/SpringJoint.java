@@ -13,10 +13,10 @@ public class SpringJoint extends ObjectComponent implements Simulatable {
 
 	private RigidBody otherBody, thisBody;
 	private Vector2 thisAttachment, otherAttachment;
-	private float staticDistance, springConstant, maxForce = Float.POSITIVE_INFINITY;
+	private double staticDistance, springConstant, maxForce = Float.POSITIVE_INFINITY;
 
 	public SpringJoint(GameObject parent, Vector2 thisAttachment, RigidBody otherBody, Vector2 otherAttachment,
-			float staticDistance, float springConstant, float maxForce) {
+			double staticDistance, double springConstant, double maxForce) {
 		super(parent);
 		this.thisAttachment = thisAttachment;
 		this.otherBody = otherBody;
@@ -28,7 +28,7 @@ public class SpringJoint extends ObjectComponent implements Simulatable {
 	}
 
 	public SpringJoint(GameObject parent, Vector2 thisAttachment, RigidBody otherBody, Vector2 otherAttachment,
-			float staticDistance, float springConstant) {
+			double staticDistance, double springConstant) {
 		super(parent);
 		this.thisAttachment = thisAttachment;
 		this.otherBody = otherBody;
@@ -39,7 +39,7 @@ public class SpringJoint extends ObjectComponent implements Simulatable {
 	}
 
 	public SpringJoint(GameObject parent, Vector2 thisAttachment, RigidBody otherBody, Vector2 otherAttachment,
-			float springConstant) {
+			double springConstant) {
 		super(parent);
 		this.thisAttachment = thisAttachment;
 		this.otherBody = otherBody;
@@ -73,13 +73,13 @@ public class SpringJoint extends ObjectComponent implements Simulatable {
 	@Override
 	public void simulateTick(int simsPerTick) {
 		Vector2 v2FromThisToOther = getVectorFromThisToOther();
-		float dist = v2FromThisToOther.getDist();
+		double dist = v2FromThisToOther.getDist();
 		if (dist != staticDistance) {
 			if (Math.abs(dist - staticDistance) * springConstant > maxForce) {
 				int index = parent.getComponentManager().getObjectComponents().indexOf(this);
 				parent.getComponentManager().getObjectComponents().remove(index);
 			}
-			float temp = (dist - staticDistance) / Math.abs(dist - staticDistance);
+			double temp = (dist - staticDistance) / Math.abs(dist - staticDistance);
 			thisBody.resoluteToImpulse(thisAttachment, v2FromThisToOther.multiply(temp).getDirection(),
 					Math.abs(dist - staticDistance) * springConstant * 0.5f / simsPerTick);
 			otherBody.resoluteToImpulse(otherAttachment, v2FromThisToOther.min().multiply(temp).getDirection(),
