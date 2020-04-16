@@ -20,7 +20,7 @@ public class Player extends GameObject {
 
 	public Player(Transform transform) {
 		super(transform, 0, GameObjectType.Player, GameState.Game);
-		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\player.png", new Transform(new Vector2(), transform.getDimensions())));
+		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\player.png", null));
 		componentManager.addObjectComponent(new CollisionComponent(this, new Rectangle(new Transform(new Vector2(), transform.getDimensions()))));
 		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.3, 0.4, 10, true, true));
 		rigidBody = componentManager.getRigidBody();

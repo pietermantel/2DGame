@@ -24,18 +24,12 @@ public class TextureComponent extends ObjectComponent {
 	public TextureComponent(GameObject parent, String img, Transform offset) {
 		super(parent);
 		texture = Texture.getTexture(img);
-		if (offset == null) {
-			offset = new Transform(new Vector2(0, 0), parent.getTransform().getDimensions());
-		}
 		this.offset = offset;
 	}
 
 	public TextureComponent(GameObject parent, Texture texture, Transform offset) {
 		super(parent);
 		this.texture = texture;
-		if (offset == null) {
-			offset = new Transform(new Vector2(0, 0), parent.getTransform().getDimensions());
-		}
 		this.offset = offset;
 	}
 
@@ -46,6 +40,9 @@ public class TextureComponent extends ObjectComponent {
 
 	@Override
 	public void render(Graphics g) {
+		if (offset == null) {
+			offset = new Transform(new Vector2(), parent.getTransform().getDimensions());
+		}
 		// Vector2 absPos = new Vector2();
 		// long start = System.nanoTime();
 		Graphics2D g2D = (Graphics2D) g;

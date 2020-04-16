@@ -6,4 +6,7 @@ public enum GameObjectType {
 	MainCamera,
 	RotationTest,
 	Wall,
+	
+	Wheel,
+	Car,
 }

@@ -32,7 +32,7 @@ public class MainCamera extends GameObject {
 	@Override
 	public void tick() {
 		zoom = 1;
-		zoom =  1 / Math.sqrt(Math.abs((0.9 * MouseWheelManager.mouseWheelRotation + 1)));
+		zoom =  (1 / Math.sqrt(Math.abs((0.9 * MouseWheelManager.mouseWheelRotation + 1))));
 		if(KeyManager.pressed[KeyEvent.VK_DOWN]) {
 //			transform.increment(new Vector2(0, -3));
 			rigidBody.addPosForce(new Vector2(0f, (float) (2f / zoom)));

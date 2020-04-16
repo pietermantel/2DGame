@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import dev.blijde_broers.input.KeyManager;
-import dev.blijde_broers.misc.collisionComponentParts.instances.MultiCorner;
+import dev.blijde_broers.misc.collisionComponentParts.instances.Rectangle;
 import dev.blijde_broers.misc.math.Transform;
 import dev.blijde_broers.misc.math.Vector2;
 import dev.blijde_broers.object.GameObject;
@@ -23,10 +23,9 @@ public class TestObject extends GameObject {
 	public TestObject(Transform transform) {
 		super(transform, 0, GameObjectType.TestObject, GameState.Game);
 		componentManager.addObjectComponent(new CollisionComponent(this,
-				new MultiCorner(new Transform(new Vector2(), transform.getDimensions().multiply(1)), 10)));
-		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\Brammm.jpg",
-				new Transform(new Vector2(), transform.getDimensions())));
-		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.0001, 0.0001, 1, true, true));
+				new Rectangle(new Transform(new Vector2(), transform.getDimensions().multiply(1)))));
+		componentManager.addObjectComponent(new TextureComponent(this, "res\\textures\\TestObject.jpg", null));
+		componentManager.addObjectComponent(new RigidBody(this, new Vector2(), 0, 0.01, 0.01, 1, true, true));
 		// GameObject temp = Handler.objects.get(0);
 		// componentManager.addObjectComponent(new SpringJoint(this,
 		// new Vector2(),

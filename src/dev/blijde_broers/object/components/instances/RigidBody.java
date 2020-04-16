@@ -25,7 +25,7 @@ public class RigidBody extends ObjectComponent implements Simulatable {
 	private Transform transform;
 	private CollisionComponent collisionComponent;
 
-	public static Vector2 gravitationalForce = new Vector2(0, 0.1);
+	public static Vector2 gravitationalForce = new Vector2(0, .1);
 
 	private Line renderImpulse;
 
@@ -99,6 +99,7 @@ public class RigidBody extends ObjectComponent implements Simulatable {
 
 	@Override
 	public void simulateTick(int simsPerTick) {
+		doCollisionResolution = (collisionComponent == null) ? false : true;
 		// if (Float.isFinite(mass)) {
 		Vector2 posVel = new Vector2(this.posVel);
 		double rotVel = this.rotVel;
@@ -120,7 +121,7 @@ public class RigidBody extends ObjectComponent implements Simulatable {
 				IntersectionReturn[] intersections = collisionComponent.intersection();
 				for (int j = 0; j < intersections.length; j++) {
 					for (int k = 0; k < intersections[j].points.length; k++) {
-						resoluteStatic(intersections);
+//						resoluteStatic(intersections, simsPerTick);
 						resoluteDynamic(intersections[j].cc, intersections[j].points[k], simsPerTick);
 					}
 				}
@@ -133,18 +134,18 @@ public class RigidBody extends ObjectComponent implements Simulatable {
 
 	private void resoluteDynamic(CollisionComponent cc, Point p, int simsPerTick) {
 		RigidBody otherRB = cc.getParent().getComponentManager().getRigidBody();
-//		int test = 0;
-//		while (collisionComponent.intersects()) {
-//			transform.mid.increment(posVel.min().divide(simsPerTick));
-//			transform.rotate(-rotVel / (simsPerTick));
-//			test++;
-//			if (test > 1) {
-//				System.out.println("loop");
-//				break;
-//			}
-//		}
-//		if (test > 1)
-//			System.out.println(test);
+		int test = 0;
+		while (collisionComponent.intersects()) {
+			transform.mid.increment(posVel.min().divide(simsPerTick));
+			transform.rotate(-rotVel / (simsPerTick));
+			test++;
+			if (test > 1) {
+				System.out.println("loop");
+				break;
+			}
+		}
+		if (test > 1)
+			System.out.println(test);
 		Vector2 pAsVector2 = p.asVector2();
 		Vector2 vThis = pAsVector2.minus(transform.mid);
 		Vector2 vOther = pAsVector2.minus(otherRB.transform.mid);
@@ -180,27 +181,34 @@ public class RigidBody extends ObjectComponent implements Simulatable {
 		// p.asVector2());
 	}
 	
-	private void resoluteStatic(IntersectionReturn[] intersections) {
+	private void resoluteStatic(IntersectionReturn[] intersections, int simsPerTick) {
 		for (IntersectionReturn intersection : intersections) {
-			RigidBody otherRB = intersection.cc.getParent().getComponentManager().getRigidBody();
-			Vector2 moveThis = new Vector2(intersection.wayOut);
-			Vector2 moveOther = new Vector2(intersection.wayOut);
-			double totalMass = mass + otherRB.mass;
-			if (Double.isFinite(totalMass)) {
-				moveThis.multiplyThis(otherRB.mass / totalMass);
-				moveOther.multiplyThis(mass / totalMass);
-			} else {
-				moveOther = new Vector2();
-			}
-			
-//			System.out.println("----");
-//			System.out.println(parent.getType());
-//			System.out.println(intersection.wayOut);
-//			System.out.println(moveThis);
-//			System.out.println(moveOther);
-//			System.out.println(totalMass);
-			transform.mid.increment(moveThis);
-			otherRB.transform.mid.increment(moveOther);
+//			if (Double.isInfinite(intersection.cc.getParent().getComponentManager().getRigidBody().mass)) {
+				RigidBody otherRB = intersection.cc.getParent().getComponentManager().getRigidBody();
+				Vector2 moveThis = new Vector2(intersection.wayOut);
+				Vector2 moveOther = new Vector2(intersection.wayOut);
+				double totalMass = mass + otherRB.mass;
+				if (Double.isFinite(totalMass)) {
+					moveThis.multiplyThis(otherRB.mass / totalMass);
+					moveOther.multiplyThis(mass / totalMass);
+				} else {
+					moveOther = new Vector2();
+				}
+
+				//			System.out.println("----");
+				//			System.out.println(parent.getType());
+				//			System.out.println(intersection.wayOut);
+				//			System.out.println(moveThis);
+				//			System.out.println(moveOther);
+				//			System.out.println(totalMass);
+				transform.mid.increment(moveThis);
+				otherRB.transform.mid.increment(moveOther);
+//			} else {
+//				while (collisionComponent.intersects()) {
+//					transform.mid.increment(posVel.min().divide(simsPerTick));
+//					transform.rotate(-rotVel / (simsPerTick));
+//				}
+//			}
 		}
 	}
 
